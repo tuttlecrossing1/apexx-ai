@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX AI v6 — Invest. Grow. Give. Build.</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060810;--bg2:#090c18;--bg3:#0c1122;--card:#0a1020;--card2:#0f182e;
+  --border:#182240;--bord2:#1e2d50;
+  --gold:#f7c948;--g2:#d4a920;--gd:rgba(247,201,72,.09);--gg:rgba(247,201,72,.22);
+  --grn:#00d48a;--gnd:rgba(0,212,138,.09);
+  --red:#ff4f4f;--rdd:rgba(255,79,79,.09);
+  --blu:#4a8fff;--bld:rgba(74,143,255,.09);
+  --cyn:#00e5ff;--cyd:rgba(0,229,255,.08);
+  --pur:#b084ff;--pud:rgba(176,132,255,.09);
+  --org:#ff9534;--ord:rgba(255,149,52,.09);
+  --tel:#22d4c8;--tld:rgba(34,212,200,.09);
+  --ros:#ff6b9d;--rsd:rgba(255,107,157,.09);
+  --text:#eef2fc;--t2:#6a82a8;--t3:#283a5a;
+  --r:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 50% 35% at 15% 0,rgba(74,143,255,.05),transparent),radial-gradient(ellipse 40% 25% at 90% 100%,rgba(0,212,138,.04),transparent);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(74,143,255,.016) 1px,transparent 1px),linear-gradient(90deg,rgba(74,143,255,.016) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+
+/* TICKER */
+.ticker{height:30px;background:rgba(9,12,24,.98);border-bottom:1px solid var(--border);overflow:hidden;display:flex;align-items:center;position:relative;z-index:210}
+.tick-inner{display:flex;gap:28px;animation:sl 70s linear infinite;white-space:nowrap;padding:0 16px}
+.ticker:hover .tick-inner{animation-play-state:paused}
+@keyframes sl{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ti{font-family:'DM Mono',monospace;font-size:10.5px;display:flex;align-items:center;gap:5px}
+.ti-s{color:var(--text);font-weight:500}
+.ti-p{color:var(--t2)}
+.ti-c.up{color:var(--grn)}.ti-c.dn{color:var(--red)}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--grn);display:inline-block;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* TOP BAR */
+.topbar{position:sticky;top:0;z-index:200;height:50px;background:rgba(6,8,16,.96);backdrop-filter:blur(28px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:10px}
+.logo{display:flex;align-items:center;gap:7px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:16px;flex-shrink:0;letter-spacing:-.2px}
+.lm{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),#d05a00);border-radius:7px;display:grid;place-items:center;font-size:13px;box-shadow:0 0 14px var(--gg)}
+.nav{display:flex;gap:1px;flex:1;justify-content:center;overflow-x:auto}
+.nav::-webkit-scrollbar{height:0}
+.nb{padding:4px 9px;border-radius:6px;font-size:11px;font-weight:600;color:var(--t2);background:none;border:none;cursor:pointer;transition:all .14s;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif}
+.nb:hover{color:var(--text);background:rgba(255,255,255,.05)}
+.nb.on{color:var(--gold);background:var(--gd)}
+.portval{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:var(--grn);flex-shrink:0;cursor:pointer}
+
+/* LAYOUT */
+.shell{display:grid;grid-template-columns:190px 1fr;min-height:calc(100vh - 80px);position:relative;z-index:1}
+.sidebar{border-right:1px solid var(--border);padding:9px 0;background:rgba(6,8,16,.6);overflow-y:auto}
+.sg{padding:4px 10px 2px;font-size:8.5px;font-weight:700;letter-spacing:.14em;color:var(--t3);text-transform:uppercase;margin-top:7px}
+.si{display:flex;align-items:center;gap:7px;padding:6px 10px;margin:1px 4px;border-radius:7px;cursor:pointer;font-size:11.5px;color:var(--t2);transition:all .13s;border:1px solid transparent}
+.si:hover{background:var(--bg3);color:var(--text)}
+.si.on{background:var(--gd);color:var(--gold);border-color:rgba(247,201,72,.1)}
+.si .ico{width:15px;text-align:center;font-size:11px}
+.stag{margin-left:auto;font-size:7.5px;font-weight:800;padding:1px 4px;border-radius:4px}
+.stag.g{background:var(--grn);color:#000}.stag.o{background:var(--gold);color:#000}
+.stag.ai{background:var(--pur);color:#000}.stag.live{background:var(--grn);color:#000;animation:blink 1.5s infinite}
+
+/* CONTENT */
+.content{padding:18px;overflow-y:auto;display:flex;flex-direction:column;gap:15px}
+.panel{display:none;flex-direction:column;gap:14px;animation:fu .2s ease}
+.panel.on{display:flex}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.ph h1{font-family:'Instrument Serif',serif;font-size:24px;line-height:1.2;letter-spacing:-.2px}
+.ph p{font-size:12.5px;color:var(--t2);margin-top:3px;line-height:1.6}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:15px}
+.ch{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;margin-bottom:2px;display:flex;align-items:center;gap:6px}
+.cs{font-size:11px;color:var(--t2);margin-bottom:11px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+
+/* STATS */
+.stat{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px;position:relative;overflow:hidden}
+.stat::after{content:'';position:absolute;top:-8px;right:-8px;width:40px;height:40px;border-radius:50%;opacity:.18;filter:blur(14px)}
+.stat.gold::after{background:var(--gold)}.stat.grn::after{background:var(--grn)}
+.stat.blu::after{background:var(--blu)}.stat.pur::after{background:var(--pur)}
+.stat.tel::after{background:var(--tel)}
+.sl{font-size:9px;color:var(--t2);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.sv{font-family:'DM Mono',monospace;font-weight:700;font-size:20px;line-height:1}
+.sc{font-size:10px;margin-top:3px;font-weight:500}
+.up{color:var(--grn)}.dn{color:var(--red)}.neu{color:var(--t2)}
+
+/* BUTTONS */
+.btn{padding:7px 14px;border-radius:7px;border:none;cursor:pointer;font-size:11.5px;font-weight:700;transition:all .14s;display:inline-flex;align-items:center;gap:4px;font-family:'Plus Jakarta Sans',sans-serif}
+.btn-gold{background:var(--gold);color:#000}.btn-gold:hover{background:var(--g2);transform:translateY(-1px);box-shadow:0 4px 12px var(--gg)}
+.btn-grn{background:var(--grn);color:#000}
+.btn-blu{background:var(--blu);color:#fff}
+.btn-pur{background:var(--pur);color:#000}
+.btn-tel{background:var(--tel);color:#000}
+.btn-ghost{background:var(--bg3);border:1px solid var(--border);color:var(--t2)}.btn-ghost:hover{color:var(--text)}
+.btn-outline{background:transparent;border:1px solid var(--bord2);color:var(--t2)}.btn-outline:hover{border-color:var(--gold);color:var(--gold);background:var(--gd)}
+.btn-sm{padding:4px 9px;font-size:10.5px;border-radius:6px}
+.btn-lg{padding:10px 20px;font-size:13px;border-radius:10px}
+.btn-full{width:100%;justify-content:center}
+.btn-dl{background:linear-gradient(135deg,var(--pur),var(--blu));color:#fff;font-size:12px;padding:9px 18px;border-radius:9px}
+.btn-dl:hover{opacity:.9;transform:translateY(-1px)}
+
+/* TAGS */
+.tag{display:inline-flex;align-items:center;gap:2px;padding:2px 7px;border-radius:20px;font-size:9.5px;font-weight:700}
+.tag-buy{background:var(--gnd);color:var(--grn);border:1px solid rgba(0,212,138,.2)}
+.tag-hold{background:var(--gd);color:var(--gold);border:1px solid rgba(247,201,72,.2)}
+.tag-sell{background:var(--rdd);color:var(--red);border:1px solid rgba(255,79,79,.2)}
+.tag-new{background:var(--bld);color:var(--blu);border:1px solid rgba(74,143,255,.2)}
+.tag-ai{background:var(--pud);color:var(--pur);border:1px solid rgba(176,132,255,.2)}
+.tag-live{background:var(--gnd);color:var(--grn);border:1px solid rgba(0,212,138,.25)}
+.tag-reit{background:var(--ord);color:var(--org);border:1px solid rgba(255,149,52,.2)}
+.tag-etf{background:var(--pud);color:var(--pur);border:1px solid rgba(176,132,255,.2)}
+
+/* FORM */
+.fl{font-size:11px;color:var(--t2);font-weight:600;margin-bottom:3px}
+.fi{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 11px;border-radius:7px;font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;outline:none;transition:border .14s;width:100%}
+.fi:focus{border-color:var(--gold)}
+select.fi{cursor:pointer}
+.frow{margin-bottom:9px}
+.trow{display:flex;align-items:center;justify-content:space-between;padding:5px 0}
+.tl{font-size:12px}.ts{font-size:10.5px;color:var(--t2);margin-top:1px}
+.tog{width:32px;height:17px;background:var(--bord2);border-radius:9px;position:relative;cursor:pointer;transition:background .16s;flex-shrink:0}
+.tog.on{background:var(--grn)}
+.tog::after{content:'';position:absolute;top:2px;left:2px;width:13px;height:13px;background:#fff;border-radius:50%;transition:transform .16s}
+.tog.on::after{transform:translateX(15px)}
+
+/* ALERTS */
+.alert{padding:9px 12px;border-radius:8px;font-size:11.5px;display:flex;gap:7px;align-items:flex-start;line-height:1.55}
+.alert.info{background:var(--bld);border:1px solid rgba(74,143,255,.2);color:#a0c4ff}
+.alert.ok{background:var(--gnd);border:1px solid rgba(0,212,138,.2);color:var(--grn)}
+.alert.warn{background:var(--gd);border:1px solid rgba(247,201,72,.2);color:var(--gold)}
+.alert.ai{background:var(--pud);border:1px solid rgba(176,132,255,.2);color:var(--pur)}
+.alert.live{background:rgba(0,212,138,.06);border:1px solid rgba(0,212,138,.3);color:var(--grn)}
+.alert.disc{background:rgba(255,79,79,.07);border:1px solid rgba(255,79,79,.3);color:#ff9090}
+.ai-ico{font-size:13px;margin-top:1px}
+
+/* TABLE */
+.dt{width:100%;border-collapse:collapse}
+.dt th{text-align:left;font-size:9px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:4px 8px;border-bottom:1px solid var(--border)}
+.dt td{padding:7px 8px;font-size:11px;border-bottom:1px solid rgba(24,34,64,.5);color:var(--t2);vertical-align:middle}
+.dt td:first-child{color:var(--text);font-weight:600}
+.dt tr:hover td{background:rgba(14,22,40,.7)}
+.dt tr:last-child td{border-bottom:none}
+
+/* PROGRESS */
+.pb{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.pf{height:100%;border-radius:2px;transition:width 1s ease}
+
+/* CHAT */
+.chatbox{display:flex;flex-direction:column;gap:8px;max-height:340px;overflow-y:auto;padding:2px}
+.cm{display:flex;gap:7px;align-items:flex-start}
+.cm.u{flex-direction:row-reverse}
+.cav{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:11px;flex-shrink:0}
+.cm.ai .cav{background:linear-gradient(135deg,var(--gold),#d05a00)}
+.cm.u .cav{background:var(--bld);border:1px solid var(--bord2)}
+.cb{max-width:84%;padding:8px 12px;border-radius:11px;font-size:12px;line-height:1.6}
+.cm.ai .cb{background:var(--card2);border:1px solid var(--border);border-top-left-radius:3px}
+.cm.u .cb{background:var(--bld);border:1px solid rgba(74,143,255,.15);border-top-right-radius:3px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.chip{padding:4px 9px;border-radius:13px;background:var(--bg3);border:1px solid var(--border);color:var(--t2);font-size:10.5px;cursor:pointer;transition:all .13s}
+.chip:hover{border-color:var(--gold);color:var(--gold);background:var(--gd)}
+.cir{display:flex;gap:6px;margin-top:6px}
+.ci{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:8px 11px;border-radius:8px;font-size:12px;font-family:'Plus Jakarta Sans';outline:none;transition:border .13s}
+.ci:focus{border-color:var(--gold)}
+.td{width:4px;height:4px;border-radius:50%;background:var(--gold);animation:bop .9s infinite}
+.td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
+@keyframes bop{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+
+/* AUTO-INVEST AI STATUS */
+.ai-engine{background:linear-gradient(135deg,rgba(176,132,255,.1),rgba(74,143,255,.07));border:1px solid rgba(176,132,255,.25);border-radius:12px;padding:16px;position:relative;overflow:hidden}
+.ai-engine::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--pur),transparent);animation:sweep 3s infinite}
+@keyframes sweep{0%{opacity:0;transform:translateX(-100%)}50%{opacity:1}100%{opacity:0;transform:translateX(100%)}}
+.ai-status-dot{width:8px;height:8px;border-radius:50%;background:var(--grn);display:inline-block;animation:blink 1.5s infinite;margin-right:6px}
+.ai-decision{background:rgba(0,0,0,.3);border-radius:8px;padding:10px 12px;margin:8px 0;font-family:'DM Mono',monospace;font-size:11px;color:var(--grn);line-height:1.6}
+.ai-decision.warn{color:var(--gold)}.ai-decision.stop{color:var(--red)}
+.rule-row{display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(0,0,0,.2);border-radius:7px;margin-bottom:6px}
+.rule-icon{font-size:16px;flex-shrink:0}
+.rule-label{font-size:12px;font-weight:600;flex:1}
+.rule-status{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px}
+.rule-status.active{background:var(--grn);color:#000}
+.rule-status.watch{background:var(--gold);color:#000}
+.rule-status.stopped{background:var(--red);color:#fff}
+
+/* COMPOUND CALC */
+.sim-num{font-family:'DM Mono',monospace;font-size:28px;font-weight:700;color:var(--gold)}
+.sim-label{font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.calc-chart{display:flex;align-items:flex-end;gap:2px;height:80px;margin:12px 0}
+.cc-bar{flex:1;border-radius:2px 2px 0 0;min-height:3px;transition:height .7s ease}
+
+/* MASTER INVESTOR */
+.master-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:15px;transition:all .18s;position:relative;overflow:hidden}
+.master-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.master-card::before{content:'';position:absolute;top:-15px;right:-15px;width:60px;height:60px;border-radius:50%;opacity:.12;filter:blur(20px)}
+.mc-avatar{font-size:28px;margin-bottom:8px}
+.mc-name{font-family:'Instrument Serif',serif;font-size:17px;margin-bottom:1px}
+.mc-title{font-size:10px;color:var(--t2);margin-bottom:9px}
+.mc-quote{font-size:11.5px;color:var(--text);line-height:1.65;font-style:italic;border-left:2px solid;padding-left:9px;margin-bottom:10px}
+.mc-rule{display:flex;align-items:flex-start;gap:5px;font-size:11px;color:var(--t2);margin-bottom:4px;line-height:1.5}
+.mc-rule::before{content:'→';color:var(--gold);flex-shrink:0;font-style:normal}
+.book-row{display:flex;align-items:center;gap:9px;padding:8px 10px;background:rgba(0,0,0,.2);border-radius:8px;margin-top:4px;cursor:pointer;transition:all .15s}
+.book-row:hover{border-left:2px solid var(--gold)}
+
+/* FRIEND GROUP */
+.friend-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:9px;transition:all .15s}
+.friend-row:hover{border-color:var(--grn)}
+.friend-avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:14px;flex-shrink:0}
+.friend-name{font-size:12.5px;font-weight:600;flex:1}
+.friend-bal{font-family:'DM Mono',monospace;font-size:12px;color:var(--grn);font-weight:600}
+
+/* DISCLAIMER */
+.disc-doc{background:linear-gradient(135deg,rgba(255,79,79,.07),rgba(247,201,72,.05));border:2px solid rgba(255,79,79,.3);border-radius:12px;padding:18px}
+.disc-title{font-family:'Instrument Serif',serif;font-size:18px;color:var(--red);margin-bottom:10px}
+.disc-body{font-size:11.5px;color:var(--t2);line-height:1.8}
+.disc-body p{margin-bottom:8px}
+.disc-body strong{color:var(--text)}
+.disc-sign{margin-top:14px;padding:12px;background:rgba(0,0,0,.3);border-radius:8px}
+
+/* LIVE QUOTE */
+.qc{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px;transition:all .18s;cursor:pointer}
+.qc:hover{border-color:var(--gold);transform:translateY(-1px)}
+.qc-t{font-weight:800;font-size:14px}
+.qc-n{font-size:10px;color:var(--t2)}
+.qc-p{font-family:'DM Mono',monospace;font-size:14px;font-weight:700}
+.qc-c{font-size:10px;font-weight:600}
+.qc-bar{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin:6px 0}
+.qc-f{height:100%;border-radius:1px}
+
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bord2);border-radius:2px}
+.glow-g{box-shadow:0 0 18px rgba(0,212,138,.1)}
+.glow-gold{box-shadow:0 0 18px rgba(247,201,72,.1)}
+.glow-pur{box-shadow:0 0 18px rgba(176,132,255,.1)}
+
+@media(max-width:700px){.shell{grid-template-columns:1fr}.sidebar{display:none}.g4{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- TICKER TAPE -->
+<div class="ticker">
+  <div class="tick-inner" id="ticker">
+    <div class="ti"><span class="ldot"></span><span style="color:var(--grn);font-size:9px;font-weight:800">LIVE</span></div>
+    <div class="ti"><span class="ti-s">NVDA</span><span class="ti-p" id="t-nvda">--</span><span class="ti-c up" id="tc-nvda"></span></div>
+    <div class="ti"><span class="ti-s">AAPL</span><span class="ti-p" id="t-aapl">--</span><span class="ti-c" id="tc-aapl"></span></div>
+    <div class="ti"><span class="ti-s">MSFT</span><span class="ti-p" id="t-msft">--</span><span class="ti-c" id="tc-msft"></span></div>
+    <div class="ti"><span class="ti-s">TSLA</span><span class="ti-p" id="t-tsla">--</span><span class="ti-c" id="tc-tsla"></span></div>
+    <div class="ti"><span class="ti-s">SPY</span><span class="ti-p" id="t-spy">--</span><span class="ti-c" id="tc-spy"></span></div>
+    <div class="ti"><span class="ti-s">VOO</span><span class="ti-p" id="t-voo">--</span><span class="ti-c" id="tc-voo"></span></div>
+    <div class="ti"><span class="ti-s">VNQ</span><span class="ti-p" id="t-vnq">--</span><span class="ti-c" id="tc-vnq"></span></div>
+    <div class="ti"><span class="ti-s">GLD</span><span class="ti-p" id="t-gld">--</span><span class="ti-c" id="tc-gld"></span></div>
+    <div class="ti"><span class="ti-s">QQQ</span><span class="ti-p" id="t-qqq">--</span><span class="ti-c" id="tc-qqq"></span></div>
+    <div class="ti"><span class="ti-s">BTC</span><span class="ti-p" id="t-btc">--</span><span class="ti-c" id="tc-btc"></span></div>
+    <!-- duplicate -->
+    <div class="ti"><span class="ti-s">META</span><span class="ti-p" id="t-meta">--</span><span class="ti-c" id="tc-meta"></span></div>
+    <div class="ti"><span class="ti-s">AMZN</span><span class="ti-p" id="t-amzn">--</span><span class="ti-c" id="tc-amzn"></span></div>
+    <div class="ti"><span class="ti-s">O</span><span class="ti-p" id="t-o">--</span><span class="ti-c" id="tc-o"></span></div>
+    <div class="ti"><span class="ti-s">BND</span><span class="ti-p" id="t-bnd">--</span><span class="ti-c" id="tc-bnd"></span></div>
+    <div class="ti"><span class="ti-s">NVDA</span><span class="ti-p" id="t2-nvda">--</span><span class="ti-c up" id="tc2-nvda"></span></div>
+    <div class="ti"><span class="ti-s">SPY</span><span class="ti-p" id="t2-spy">--</span><span class="ti-c" id="tc2-spy"></span></div>
+    <div class="ti"><span class="ti-s">AAPL</span><span class="ti-p" id="t2-aapl">--</span><span class="ti-c" id="tc2-aapl"></span></div>
+    <div class="ti"><span class="ti-s">QQQ</span><span class="ti-p" id="t2-qqq">--</span><span class="ti-c" id="tc2-qqq"></span></div>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo"><div class="lm">⚡</div>APEX <span style="color:var(--gold)">AI</span></div>
+  <div class="nav">
+    <button class="nb on" onclick="go('dashboard',this)">Dashboard</button>
+    <button class="nb" onclick="go('accounts',this)">🔗 My Accounts</button>
+    <button class="nb" onclick="go('autoinvest',this)">🤖 Auto-Invest AI</button>
+    <button class="nb" onclick="go('calculator',this)">🧮 Simulator</button>
+    <button class="nb" onclick="go('markets',this)">📡 Live Markets</button>
+    <button class="nb" onclick="go('baskets',this)">🧺 Baskets</button>
+    <button class="nb" onclick="go('masters',this)">🎓 Masters</button>
+    <button class="nb" onclick="go('friends',this)">👥 Friend Group</button>
+    <button class="nb" onclick="go('taxes',this)">💜 Taxes</button>
+    <button class="nb" onclick="go('give',this)">💚 Give</button>
+    <button class="nb" onclick="go('ai',this)">🤖 AI Advisor</button>
+    <button class="nb" onclick="go('portfolio',this)">Portfolio</button>
+    <button class="nb" onclick="go('learn',this)">📚 Learn</button>
+  </div>
+  <div class="portval" onclick="go('accounts')" title="Click to update">Portfolio: $<span id="port-total">0</span></div>
+</div>
+
+<!-- SHELL -->
+<div class="shell">
+<div class="sidebar">
+  <div class="sg">Live</div>
+  <div class="si on" onclick="go('dashboard',null,this)"><span class="ico">🏠</span>Dashboard</div>
+  <div class="si" onclick="go('markets',null,this)"><span class="ico">📡</span>Markets <span class="stag live">LIVE</span></div>
+  <div class="si" onclick="go('calculator',null,this)"><span class="ico">🧮</span>Simulator</div>
+  <div class="sg">Investing</div>
+  <div class="si" onclick="go('autoinvest',null,this)"><span class="ico">🤖</span>Auto-Invest AI <span class="stag ai">AI</span></div>
+  <div class="si" onclick="go('baskets',null,this)"><span class="ico">🧺</span>Baskets</div>
+  <div class="si" onclick="go('accounts',null,this)"><span class="ico">🔗</span>My Accounts</div>
+  <div class="si" onclick="go('portfolio',null,this)"><span class="ico">💼</span>Portfolio</div>
+  <div class="sg">Education</div>
+  <div class="si" onclick="go('masters',null,this)"><span class="ico">🎓</span>Masters <span class="stag g">NEW</span></div>
+  <div class="si" onclick="go('ai',null,this)"><span class="ico">🤖</span>AI Advisor <span class="stag ai">AI</span></div>
+  <div class="si" onclick="go('learn',null,this)"><span class="ico">📚</span>Learn</div>
+  <div class="sg">Social & Legal</div>
+  <div class="si" onclick="go('friends',null,this)"><span class="ico">👥</span>Friend Group <span class="stag g">NEW</span></div>
+  <div class="sg">Tax & Giving</div>
+  <div class="si" onclick="go('taxes',null,this)"><span class="ico">💜</span>Taxes</div>
+  <div class="si" onclick="go('give',null,this)"><span class="ico">💚</span>Give & Foundation</div>
+  <div class="si" onclick="go('goals',null,this)"><span class="ico">🎯</span>Goals</div>
+  <div class="si" onclick="go('risk',null,this)"><span class="ico">🛡️</span>Risk Manager</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════ DASHBOARD ══════════════════════ -->
+<div id="p-dashboard" class="panel on">
+  <div class="ph"><h1>Your Financial Command Center ⚡</h1><p>Real-time markets · Auto-Invest AI · Friend Groups · Masters · Disclaimer-protected giving</p></div>
+  <div class="g4">
+    <div class="stat gold"><div class="sl">My Portfolio</div><div class="sv">$<span id="dash-port">0</span></div><div class="sc" id="dash-note" style="color:var(--t2)">Enter accounts →</div></div>
+    <div class="stat grn"><div class="sl"><span class="ldot"></span> S&P 500 Live</div><div class="sv" id="dash-spy">--</div><div class="sc" id="dash-sc"></div></div>
+    <div class="stat pur"><div class="sl">Auto-Invest AI</div><div class="sv" style="font-size:14px;color:var(--pur)" id="ai-status-label">Setting up...</div><div class="sc" id="ai-status-sc" style="color:var(--pur)">Click to configure</div></div>
+    <div class="stat tel"><div class="sl">Friend Group</div><div class="sv" style="font-size:14px;color:var(--tel)" id="friend-total">$0</div><div class="sc" style="color:var(--tel)" id="friend-count">0 members</div></div>
+  </div>
+  <div class="alert disc"><span class="ai-ico">⚠️</span><div><strong>IMPORTANT:</strong> APEX AI is an educational tool — not a licensed financial advisor. All investments carry risk including loss of principal. Past performance does not guarantee future results. APEX AI is not responsible for investment decisions or losses. Always consult a licensed financial professional. <button class="btn btn-sm" style="background:var(--red);color:#fff;margin-left:6px" onclick="go('friends')">Download Full Disclaimer →</button></div></div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch">⚡ Quick Start</div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div style="display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--card2);border:1px solid rgba(247,201,72,.2);border-radius:9px;cursor:pointer" onclick="go('accounts')">
+          <span style="font-size:18px">🔗</span><div style="flex:1"><div style="font-size:12.5px;font-weight:700">Set Up My Accounts</div><div style="font-size:11px;color:var(--t2)">Enter your real balances (Ascensus, Robinhood, etc.)</div></div><span style="color:var(--gold);font-size:11px">→</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--card2);border:1px solid rgba(176,132,255,.2);border-radius:9px;cursor:pointer" onclick="go('autoinvest')">
+          <span style="font-size:18px">🤖</span><div style="flex:1"><div style="font-size:12.5px;font-weight:700">Configure Auto-Invest AI</div><div style="font-size:11px;color:var(--t2)">AI knows when to stop, hold, and increase</div></div><span class="stag ai">AI</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--card2);border:1px solid rgba(34,212,200,.2);border-radius:9px;cursor:pointer" onclick="go('friends')">
+          <span style="font-size:18px">👥</span><div style="flex:1"><div style="font-size:12.5px;font-weight:700">Invite Friends to Invest Together</div><div style="font-size:11px;color:var(--t2)">Download legal disclaimer first</div></div><span style="color:var(--tel);font-size:11px">→</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--card2);border:1px solid rgba(0,212,138,.2);border-radius:9px;cursor:pointer" onclick="go('calculator')">
+          <span style="font-size:18px">🧮</span><div style="flex:1"><div style="font-size:12.5px;font-weight:700">Play with Numbers (Simulator)</div><div style="font-size:11px;color:var(--t2)">See exactly how your money grows</div></div><span style="color:var(--grn);font-size:11px">→</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch">📡 Live Market Snapshot</div>
+      <div class="g2" style="gap:8px" id="dash-movers"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ MY ACCOUNTS ══════════════════════ -->
+<div id="p-accounts" class="panel">
+  <div class="ph"><h1>🔗 My Accounts — Real Balances</h1><p>Enter your actual balances. APEX AI never connects to your accounts — you control everything here.</p></div>
+  <div class="alert info"><span class="ai-ico">🔐</span><div><strong>Your privacy is protected.</strong> You enter balances manually. APEX AI does NOT connect to or log into any of your accounts. All data stays in your browser only.</div></div>
+
+  <div class="card glow-g">
+    <div class="ch">Enter Your Account Balances</div>
+    <div class="cs">Type in your real balances — these power your total portfolio view and AI recommendations</div>
+    <div class="g2">
+      <div>
+        <div class="frow">
+          <div class="fl">🏦 Ascensus 401(k) — My Balance</div>
+          <input class="fi" type="number" id="bal-asc" placeholder="Enter your real Ascensus balance e.g. 12500" oninput="updatePortTotal()">
+          <div style="font-size:10px;color:var(--t2);margin-top:3px">Log in at <a href="https://www.ascensus.com" target="_blank" style="color:var(--gold)">ascensus.com</a> to find your current balance</div>
+        </div>
+        <div class="frow">
+          <div class="fl">💚 Robinhood Balance</div>
+          <input class="fi" type="number" id="bal-rh" placeholder="$0 — enter if you have an account" oninput="updatePortTotal()">
+        </div>
+        <div class="frow">
+          <div class="fl">💸 Cash App Investing Balance</div>
+          <input class="fi" type="number" id="bal-ca" placeholder="$0 — enter if you have an account" oninput="updatePortTotal()">
+        </div>
+        <div class="frow">
+          <div class="fl">🏛️ Fidelity Balance (if you have one)</div>
+          <input class="fi" type="number" id="bal-fid" placeholder="$0 — leave blank if you don't have Fidelity" oninput="updatePortTotal()">
+        </div>
+        <div class="frow">
+          <div class="fl">📦 Other Brokerage (M1, Schwab, etc.)</div>
+          <input class="fi" type="number" id="bal-other" placeholder="$0" oninput="updatePortTotal()">
+        </div>
+        <div class="frow">
+          <div class="fl">💵 Cash / Savings available to invest</div>
+          <input class="fi" type="number" id="bal-cash" placeholder="$0" oninput="updatePortTotal()">
+        </div>
+      </div>
+      <div>
+        <div style="background:linear-gradient(135deg,rgba(0,212,138,.08),rgba(74,143,255,.06));border:1px solid rgba(0,212,138,.2);border-radius:11px;padding:16px;height:100%;display:flex;flex-direction:column;gap:10px">
+          <div style="font-size:9.5px;font-weight:800;color:var(--grn);text-transform:uppercase;letter-spacing:.1em">Total Investment Portfolio</div>
+          <div style="font-family:'DM Mono',monospace;font-size:32px;font-weight:700;color:var(--grn)" id="total-display">$0</div>
+          <div id="account-breakdown" style="font-size:11.5px;color:var(--t2);line-height:2"></div>
+          <div class="alert ok" style="font-size:11px;margin-top:auto"><span>💡</span>Enter your actual Ascensus balance above — log in first to see the real number.</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-gold btn-lg btn-full" style="margin-top:12px" onclick="saveAccounts()">✅ Save My Balances</button>
+  </div>
+
+  <!-- ACCOUNT GUIDES -->
+  <div class="g3">
+    <div class="card">
+      <div class="ch">🏦 Ascensus 401(k)</div>
+      <div class="cs">Your workplace retirement plan</div>
+      <div style="font-size:11.5px;color:var(--t2);line-height:1.7;margin-bottom:10px">Your Ascensus account is your most tax-advantaged investment. Pre-tax contributions reduce your taxable income today. Always contribute at least enough to get the full employer match — that's free money.</div>
+      <div class="alert ok" style="font-size:11px;margin-bottom:10px"><span>✅</span>Find your balance: Log in → click "Account Summary" → note the "Total Account Value"</div>
+      <div style="display:flex;gap:7px">
+        <a href="https://www.ascensus.com" target="_blank" style="text-decoration:none;flex:1"><button class="btn btn-gold btn-full">Log into Ascensus →</button></a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch">💚 Robinhood</div>
+      <div class="cs">Commission-free stocks, ETFs, options, crypto</div>
+      <div style="font-size:11.5px;color:var(--t2);line-height:1.7;margin-bottom:10px">Fractional shares from $1. Now offers a Roth IRA with a 1% match on contributions (put in $7K → get $70 free). Best mobile app for beginners and active investors.</div>
+      <div style="display:flex;gap:7px">
+        <a href="https://robinhood.com" target="_blank" style="text-decoration:none;flex:1"><button class="btn btn-gold btn-full">Open / Log into Robinhood →</button></a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch">💸 Cash App Investing</div>
+      <div class="cs">Stocks + Bitcoin from $1</div>
+      <div style="font-size:11.5px;color:var(--t2);line-height:1.7;margin-bottom:10px">If you already use Cash App for payments, you can invest directly inside it. Limited to stocks and Bitcoin (no ETFs, REITs, or bonds). Great for a quick first step.</div>
+      <div style="display:flex;gap:7px">
+        <a href="https://cash.app" target="_blank" style="text-decoration:none;flex:1"><button class="btn btn-gold btn-full">Open Cash App →</button></a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch">🥧 M1 Finance</div>
+      <div class="cs">Best for automated basket investing</div>
+      <div style="font-size:11.5px;color:var(--t2);line-height:1.7;margin-bottom:10px">Create investment "pies" that match APEX AI baskets perfectly. Auto-rebalances for free. IRAs available. Best broker if you want true autopilot investing.</div>
+      <a href="https://m1.com" target="_blank" style="text-decoration:none"><button class="btn btn-gold btn-full" style="margin-top:8px">Open M1 Finance →</button></a>
+    </div>
+    <div class="card">
+      <div class="ch">🏛️ Fidelity</div>
+      <div class="cs">Best all-around — all asset types</div>
+      <div style="font-size:11.5px;color:var(--t2);line-height:1.7;margin-bottom:10px">Only add this if you choose to open a Fidelity account. They offer ZERO-fee index funds (FZROX, FZILX), free IRAs, REITs, bonds, and the best Donor-Advised Fund (Fidelity Charitable).</div>
+      <a href="https://fidelity.com" target="_blank" style="text-decoration:none"><button class="btn btn-gold btn-full" style="margin-top:8px">Open Fidelity →</button></a>
+    </div>
+    <div class="card">
+      <div class="ch">🤖 Betterment</div>
+      <div class="cs">Fully automated robo-advisor</div>
+      <div style="font-size:11.5px;color:var(--t2);line-height:1.7;margin-bottom:10px">Answer 5 questions, deposit money, AI manages everything. Tax-loss harvesting, rebalancing, goal tracking — all automatic. 0.25%/yr fee. Perfect if you want truly hands-off.</div>
+      <a href="https://betterment.com" target="_blank" style="text-decoration:none"><button class="btn btn-gold btn-full" style="margin-top:8px">Open Betterment →</button></a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ AUTO-INVEST AI ══════════════════════ -->
+<div id="p-autoinvest" class="panel">
+  <div class="ph"><h1>🤖 Auto-Invest AI</h1><p>The most intelligent investing tool in APEX AI. Configures automatic investing, and knows exactly <em>when to stop, hold, pause, and increase</em> based on market conditions and your goals.</p></div>
+
+  <div class="ai-engine glow-pur">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <span class="ai-status-dot"></span>
+      <div style="font-family:'Instrument Serif',serif;font-size:18px">Auto-Invest AI Engine</div>
+      <span class="tag tag-ai" style="margin-left:auto">● ACTIVE</span>
+    </div>
+    <div class="ai-decision" id="ai-live-decision">
+      ⚡ AI is analyzing market conditions and your portfolio...
+      Press "Run AI Analysis" below to get real-time investment decisions.
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0">
+      <div>
+        <div style="font-size:9.5px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">SMART RULES — AI MONITORS THESE</div>
+        <div class="rule-row" id="rule-loss"><span class="rule-icon">🛑</span><div><div class="rule-label">Stop-Loss Trigger</div><div style="font-size:10px;color:var(--t2)">Pause investing if portfolio drops <span id="rl-val">8</span>% in 30 days</div></div><span class="rule-status active" id="rl-status">WATCHING</span></div>
+        <div class="rule-row" id="rule-inc"><span class="rule-icon">📈</span><div><div class="rule-label">Increase on Dips</div><div style="font-size:10px;color:var(--t2)">Add 50% more when market drops <span id="ri-val">5</span>%</div></div><span class="rule-status active">READY</span></div>
+        <div class="rule-row" id="rule-peak"><span class="rule-icon">⚡</span><div><div class="rule-label">Momentum Boost</div><div style="font-size:10px;color:var(--t2)">Increase 25% when on a 3-month uptrend</div></div><span class="rule-status active">ACTIVE</span></div>
+        <div class="rule-row" id="rule-rebal"><span class="rule-icon">⚖️</span><div><div class="rule-label">Auto-Rebalance</div><div style="font-size:10px;color:var(--t2)">Rebalance if any asset drifts 5%+ from target</div></div><span class="rule-status active">ON</span></div>
+        <div class="rule-row" id="rule-harvest"><span class="rule-icon">📉</span><div><div class="rule-label">Tax-Loss Harvesting</div><div style="font-size:10px;color:var(--t2)">Auto-sell losers in Dec to save on taxes</div></div><span class="rule-status active">ON</span></div>
+        <div class="rule-row" id="rule-div"><span class="rule-icon">💰</span><div><div class="rule-label">Dividend Reinvestment</div><div style="font-size:10px;color:var(--t2)">Auto-reinvest all dividends</div></div><span class="rule-status active">ON</span></div>
+      </div>
+      <div>
+        <div style="font-size:9.5px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">CONFIGURE AI RULES</div>
+        <div class="frow"><div class="fl">📅 Invest frequency</div><select class="fi" id="ai-freq"><option>Weekly — Every Monday</option><option selected>Bi-weekly — Every other Friday</option><option>Monthly — 1st of month</option><option>Daily — Small amounts every day</option></select></div>
+        <div class="frow"><div class="fl">💵 Base investment amount</div><input class="fi" type="number" id="ai-base" value="100" min="5"></div>
+        <div class="frow"><div class="fl">📊 Strategy (sets the basket)</div><select class="fi" id="ai-strat"><option>🚀 Growth (Bogle/Buffett Index)</option><option selected>⚡ All-Seasons (Tony Robbins)</option><option>🎯 Short-Term Goal</option><option>💰 Income (Dividends + REITs)</option><option>🤖 Full AI — AI decides everything</option></select></div>
+        <div class="frow"><div class="fl">🛑 Stop-loss threshold (%)</div><input class="fi" type="range" min="3" max="20" value="8" id="sl-range" oninput="document.getElementById('rl-val').textContent=this.value;document.getElementById('sl-display').textContent=this.value+'%'"><div style="text-align:center;font-family:'DM Mono';font-size:13px;color:var(--gold)" id="sl-display">8%</div></div>
+        <div class="frow"><div class="fl">📉 Buy-the-dip threshold (%)</div><input class="fi" type="range" min="3" max="15" value="5" id="dip-range" oninput="document.getElementById('ri-val').textContent=this.value;document.getElementById('dip-display').textContent=this.value+'%'"><div style="text-align:center;font-family:'DM Mono';font-size:13px;color:var(--grn)" id="dip-display">5%</div></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-pur btn-lg" onclick="runAIAnalysis()">🤖 Run AI Analysis Now</button>
+      <button class="btn btn-gold btn-lg" onclick="activateAutoInvest(this)">✅ Activate Auto-Invest AI</button>
+      <button class="btn btn-ghost" onclick="pauseAI()">⏸ Pause</button>
+    </div>
+  </div>
+
+  <!-- CURRENT AUTO-INVEST PLAN -->
+  <div class="g2">
+    <div class="card">
+      <div class="ch">📋 What AI Will Buy (This Period)</div>
+      <div class="cs">Based on your strategy: All-Seasons (Tony Robbins)</div>
+      <div id="ai-alloc-preview" style="display:flex;flex-direction:column;gap:8px;margin-top:6px"></div>
+    </div>
+    <div class="card">
+      <div class="ch">🔮 Projection (at current rate)</div>
+      <div id="ai-projection" style="display:flex;flex-direction:column;gap:7px;margin-top:6px"></div>
+      <div class="alert ai" style="margin-top:10px;font-size:11px"><span>💡</span>In a Roth IRA, ALL growth is <strong>100% tax-free</strong> at withdrawal.</div>
+    </div>
+  </div>
+
+  <!-- DECISION LOG -->
+  <div class="card">
+    <div class="ch">📜 AI Decision Log</div>
+    <div class="cs">History of every decision APEX AI has made or flagged</div>
+    <div id="ai-log" style="display:flex;flex-direction:column;gap:6px">
+      <div class="ai-decision">📅 Mar 28, 2026 — Scheduled $100 investment into All-Seasons basket → EXECUTED</div>
+      <div class="ai-decision warn">⚠️ Mar 22, 2026 — TSLA down 7.2% — Tax-loss harvest opportunity flagged → WAITING FOR APPROVAL</div>
+      <div class="ai-decision">📈 Mar 15, 2026 — Market dipped 3.2% — Within threshold, no increase triggered</div>
+      <div class="ai-decision">✅ Mar 1, 2026 — Dividends from VNQ ($12.40) reinvested into VNQ → EXECUTED</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ SIMULATOR / CALCULATOR ══════════════════════ -->
+<div id="p-calculator" class="panel">
+  <div class="ph"><h1>🧮 Investment Simulator</h1><p>Play with numbers risk-free. Adjust any variable and see exactly how your money grows. Then invest for real with one click.</p></div>
+
+  <div class="g2">
+    <!-- SIMULATOR PANEL -->
+    <div class="card glow-gold">
+      <div class="ch">🎛️ Compound Growth Calculator</div>
+      <div class="cs">Adjust the sliders — see your money grow in real time</div>
+
+      <div class="frow"><div class="fl">💵 Starting amount I have now</div><input class="fi" type="number" id="c-start" value="0" min="0" oninput="calcCompound()"><div style="font-size:10.5px;color:var(--t2);margin-top:3px">Even $0 is fine — see what regular investing does</div></div>
+      <div class="frow"><div class="fl">📅 Monthly investment amount</div><input class="fi" type="number" id="c-mo" value="100" min="5" oninput="calcCompound()"></div>
+      <div class="frow"><div class="fl">📈 Expected annual return (%)</div>
+        <input type="range" id="c-rate" min="3" max="20" value="9" oninput="document.getElementById('c-rate-d').textContent=this.value+'%';calcCompound()" style="width:100%;accent-color:var(--gold);margin:4px 0">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t2)"><span>3% (Bonds)</span><span style="color:var(--gold);font-weight:700" id="c-rate-d">9%</span><span>20% (Aggressive)</span></div>
+      </div>
+      <div class="frow"><div class="fl">⏳ Years to invest</div>
+        <input type="range" id="c-years" min="1" max="40" value="20" oninput="document.getElementById('c-yr-d').textContent=this.value+' years';calcCompound()" style="width:100%;accent-color:var(--gold);margin:4px 0">
+        <div style="text-align:center;font-family:'DM Mono';font-size:13px;color:var(--gold)" id="c-yr-d">20 years</div>
+      </div>
+      <div class="frow"><div class="fl">🏦 Account type (affects taxes)</div><select class="fi" id="c-acct" onchange="calcCompound()">
+        <option value="1" selected>Roth IRA — 100% tax-free at withdrawal</option>
+        <option value=".78">Traditional IRA — Pay taxes at withdrawal (22% bracket)</option>
+        <option value=".85">Taxable Brokerage — Pay capital gains (15% rate)</option>
+        <option value="1">401k — Grows tax-free, taxed at withdrawal</option>
+      </select></div>
+
+      <!-- RESULTS -->
+      <div style="background:linear-gradient(135deg,rgba(247,201,72,.09),rgba(74,143,255,.06));border:1px solid rgba(247,201,72,.2);border-radius:10px;padding:14px;margin-top:6px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;text-align:center;margin-bottom:12px">
+          <div><div class="sim-label">You Invest</div><div class="sim-num" style="font-size:18px" id="c-invested">$0</div></div>
+          <div><div class="sim-label">Interest Earned</div><div class="sim-num" style="font-size:18px;color:var(--grn)" id="c-interest">$0</div></div>
+          <div><div class="sim-label">Final Balance</div><div class="sim-num" id="c-total">$0</div></div>
+        </div>
+        <div class="calc-chart" id="calc-chart"></div>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--t3)"><span>Now</span><span id="c-mid-yr"></span><span id="c-end-yr"></span></div>
+      </div>
+    </div>
+
+    <!-- SCENARIOS + REAL INVEST -->
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="card">
+        <div class="ch">⚡ Quick Scenarios</div>
+        <div class="cs">Click any to load — see different paths instantly</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--card2);border:1px solid var(--border);border-radius:8px;cursor:pointer" onclick="setScenario(0,100,9,30)">
+            <span style="font-size:16px">☕</span><div style="flex:1"><div style="font-size:12px;font-weight:700">Coffee Money — $100/month, 30 years</div><div style="font-size:10.5px;color:var(--t2)">Like giving up coffee — see the result</div></div>
+            <span style="font-family:'DM Mono';font-size:12px;color:var(--gold)">→</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--card2);border:1px solid var(--border);border-radius:8px;cursor:pointer" onclick="setScenario(1000,250,9,20)">
+            <span style="font-size:16px">🚀</span><div style="flex:1"><div style="font-size:12px;font-weight:700">Steady Investor — $1K start, $250/mo, 20yr</div><div style="font-size:10.5px;color:var(--t2)">Middle-class wealth building</div></div>
+            <span style="font-family:'DM Mono';font-size:12px;color:var(--gold)">→</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--card2);border:1px solid rgba(247,201,72,.3);border-radius:8px;cursor:pointer" onclick="setScenario(5000,500,11,25)">
+            <span style="font-size:16px">🏆</span><div style="flex:1"><div style="font-size:12px;font-weight:700">Tony Robbins All-Seasons — $500/mo, 25yr</div><div style="font-size:10.5px;color:var(--t2)">Based on his "Money: Master the Game" plan</div></div>
+            <span style="font-family:'DM Mono';font-size:12px;color:var(--gold)">→</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--card2);border:1px solid var(--border);border-radius:8px;cursor:pointer" onclick="setScenario(0,50,8,35)">
+            <span style="font-size:16px">🌱</span><div style="flex:1"><div style="font-size:12px;font-weight:700">Small Start — $50/month, 35 years</div><div style="font-size:10.5px;color:var(--t2)">Anyone can start. See what $50 does.</div></div>
+            <span style="font-family:'DM Mono';font-size:12px;color:var(--gold)">→</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--card2);border:1px solid var(--border);border-radius:8px;cursor:pointer" onclick="setScenario(0,23000,10,30)">
+            <span style="font-size:16px">💼</span><div style="flex:1"><div style="font-size:12px;font-weight:700">Max 401k — $23K/yr for 30 years</div><div style="font-size:10.5px;color:var(--t2)">What happens if you max the limit every year</div></div>
+            <span style="font-family:'DM Mono';font-size:12px;color:var(--gold)">→</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card glow-g">
+        <div class="ch" style="color:var(--grn)">✅ Ready to Invest This Amount for Real?</div>
+        <div class="cs">Your simulation shows you CAN do this. Here's how to make it real today.</div>
+        <div style="font-size:13px;color:var(--t2);margin-bottom:12px">Your simulated monthly amount: <strong style="color:var(--gold);font-family:'DM Mono'" id="real-invest-amt">$100/month</strong></div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div class="alert ok" style="font-size:11px"><span>💡</span><strong>Best path for most people:</strong> Open a Roth IRA at Fidelity → invest in FZROX (total market, 0% fee). The numbers in your simulation will actually happen over time.</div>
+          <div style="display:flex;gap:7px;flex-wrap:wrap">
+            <a href="https://robinhood.com" target="_blank" style="text-decoration:none"><button class="btn btn-gold">Start at Robinhood ($1 min) →</button></a>
+            <a href="https://fidelity.com" target="_blank" style="text-decoration:none"><button class="btn btn-ghost">Open Fidelity IRA →</button></a>
+            <a href="https://m1.com" target="_blank" style="text-decoration:none"><button class="btn btn-ghost">M1 Auto-Invest →</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAPER TRADING SIMULATOR -->
+  <div style="background:var(--card);border:2px solid var(--cyn);border-radius:13px;padding:18px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div><div style="font-family:'Instrument Serif',serif;font-size:18px;color:var(--cyn)">🎮 Paper Trading — Practice with Fake Money</div><div style="font-size:11px;color:var(--t2)">$10,000 simulated — zero risk — live-ish prices</div></div>
+      <div style="font-family:'DM Mono';font-size:12px;color:var(--grn)">Cash: $<span id="sim-cash">10000</span></div>
+    </div>
+    <div class="g2" style="gap:8px;margin-bottom:12px">
+      <div class="stat grn" style="padding:10px"><div class="sl">Sim Value</div><div class="sv" style="font-size:17px">$<span id="sim-val">10000</span></div><div class="sc" id="sim-pnl-d">+$0</div></div>
+      <div class="stat blu" style="padding:10px"><div class="sl">Trades Made</div><div class="sv" style="font-size:17px" id="sim-tc">0</div><div class="sc neu">practice</div></div>
+    </div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px">
+      <div class="g2" style="gap:8px">
+        <div class="frow"><div class="fl">Asset</div><select class="fi" id="st"><option value="NVDA|880">NVDA — NVIDIA</option><option value="AAPL|210">AAPL — Apple</option><option value="VOO|470">VOO — S&P500 ETF</option><option value="VNQ|88">VNQ — REIT</option><option value="BND|73">BND — Bond ETF</option><option value="GLD|195">GLD — Gold</option><option value="QQQ|448">QQQ — Nasdaq</option><option value="O|58">O — Monthly Div REIT</option></select></div>
+        <div class="frow"><div class="fl">Amount ($5 min)</div><input class="fi" type="number" id="sa" value="50" min="5"></div>
+      </div>
+      <div style="display:flex;gap:7px"><button class="btn btn-grn btn-full" onclick="simT('buy')">✅ BUY</button><button class="btn btn-sm" style="background:var(--rdd);color:var(--red);border:1px solid rgba(255,79,79,.2)" onclick="simT('sell')">SELL</button><button class="btn btn-ghost btn-sm" onclick="simReset()">Reset</button></div>
+    </div>
+    <div id="sim-coach" style="font-size:11.5px;color:var(--t2)"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ LIVE MARKETS ══════════════════════ -->
+<div id="p-markets" class="panel">
+  <div class="ph"><h1>📡 Live Markets</h1><p>Real-time prices. Refreshes every 60 seconds automatically.</p></div>
+  <div class="alert live"><span class="ai-ico">●</span><div>Live data via Yahoo Finance proxy — free, no API key needed. <span id="last-upd" style="font-size:10px;opacity:.7">Updating...</span></div></div>
+  <div class="g4" id="idx-grid"></div>
+  <div class="card">
+    <div class="ch">🔍 Look Up Any Ticker</div>
+    <div style="display:flex;gap:8px;margin-bottom:8px">
+      <input class="fi" id="qs" placeholder="NVDA, AAPL, BTC-USD, VNQ..." style="max-width:250px" onkeydown="if(event.key==='Enter')lookupQ()">
+      <button class="btn btn-gold" onclick="lookupQ()">Get Live Price</button>
+    </div>
+    <div class="chips">
+      <div class="chip" onclick="setQ('NVDA')">NVDA</div><div class="chip" onclick="setQ('AAPL')">AAPL</div>
+      <div class="chip" onclick="setQ('VOO')">VOO ETF</div><div class="chip" onclick="setQ('VNQ')">VNQ REIT</div>
+      <div class="chip" onclick="setQ('GLD')">GLD Gold</div><div class="chip" onclick="setQ('BND')">BND Bond</div>
+      <div class="chip" onclick="setQ('O')">O REIT</div><div class="chip" onclick="setQ('BTC-USD')">Bitcoin</div>
+    </div>
+    <div id="q-result"></div>
+  </div>
+  <div class="card"><div class="ch">All Assets — Live</div><div class="g4" id="all-q-grid" style="margin-top:8px"></div></div>
+</div>
+
+<!-- ══════════════════════ BASKETS ══════════════════════ -->
+<div id="p-baskets" class="panel">
+  <div class="ph"><h1>🧺 Investment Baskets</h1><p>Pre-built portfolios inspired by the masters. Start from $5. AI auto-rebalances.</p></div>
+  <div class="g2">
+    <div style="background:var(--card2);border:1px solid rgba(74,143,255,.3);border-radius:12px;padding:16px">
+      <div style="font-size:22px;margin-bottom:7px">🚀</div>
+      <div style="font-family:'Instrument Serif',serif;font-size:17px;margin-bottom:3px">Long-Term Growth</div>
+      <div style="font-size:11px;color:var(--t2);margin-bottom:8px">Bogle + Buffett index strategy</div>
+      <div style="font-family:'DM Mono';font-size:18px;color:var(--blu);margin-bottom:8px">+11%/yr avg</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div style="display:flex;justify-content:space-between;font-size:11px"><span>VOO — S&P 500 (40%)</span><div class="pb" style="width:60%;margin:0 8px;align-self:center"><div class="pf" style="width:40%;background:var(--blu)"></div></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px"><span>QQQ — Nasdaq (25%)</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px"><span>VTI — Total Market (20%)</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px"><span>VEA — International (10%)</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px"><span>BND — Bonds (5%)</span></div>
+      </div>
+      <a href="https://m1.com" target="_blank" style="text-decoration:none;margin-top:10px;display:block"><button class="btn btn-blu btn-full">Build this in M1 Finance →</button></a>
+    </div>
+    <div style="background:var(--card2);border:1px solid rgba(247,201,72,.3);border-radius:12px;padding:16px">
+      <div style="font-size:22px;margin-bottom:7px">⚡</div>
+      <div style="font-family:'Instrument Serif',serif;font-size:17px;margin-bottom:3px">All-Seasons (Tony Robbins)</div>
+      <div style="font-size:11px;color:var(--t2);margin-bottom:8px">From "Money: Master the Game" — works in any economy</div>
+      <div style="font-family:'DM Mono';font-size:18px;color:var(--gold);margin-bottom:8px">Works in ALL conditions</div>
+      <div style="display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--t2)">
+        <div>US Stocks — VOO/SPY (30%)</div>
+        <div>Long-Term Bonds — TLT (40%)</div>
+        <div>Intermediate Bonds — IEF (15%)</div>
+        <div>Gold — GLD (7.5%)</div>
+        <div>Commodities — DJP (7.5%)</div>
+      </div>
+      <a href="https://m1.com" target="_blank" style="text-decoration:none;margin-top:10px;display:block"><button class="btn btn-gold btn-full">Build All-Seasons in M1 →</button></a>
+    </div>
+    <div style="background:var(--card2);border:1px solid rgba(0,212,138,.3);border-radius:12px;padding:16px">
+      <div style="font-size:22px;margin-bottom:7px">🎯</div>
+      <div style="font-family:'Instrument Serif',serif;font-size:17px;margin-bottom:3px">Short-Term Goal Basket</div>
+      <div style="font-size:11px;color:var(--t2);margin-bottom:8px">1–3 year horizon. Stable & liquid.</div>
+      <div style="font-family:'DM Mono';font-size:18px;color:var(--grn);margin-bottom:8px">~6.8%/yr</div>
+      <div style="display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--t2)">
+        <div>SHV — Short-Term Treasuries (35%)</div>
+        <div>BND — Total Bond ETF (25%)</div>
+        <div>SCHD — Dividend ETF (20%)</div>
+        <div>Cash / HYSA (20%)</div>
+      </div>
+      <a href="https://robinhood.com" target="_blank" style="text-decoration:none;margin-top:10px;display:block"><button class="btn btn-grn btn-full">Build in Robinhood →</button></a>
+    </div>
+    <div style="background:var(--card2);border:1px solid rgba(255,149,52,.3);border-radius:12px;padding:16px">
+      <div style="font-size:22px;margin-bottom:7px">💰</div>
+      <div style="font-family:'Instrument Serif',serif;font-size:17px;margin-bottom:3px">Income & Dividends</div>
+      <div style="font-size:11px;color:var(--t2);margin-bottom:8px">Cash flow focus — monthly dividends</div>
+      <div style="font-family:'DM Mono';font-size:18px;color:var(--org);margin-bottom:8px">4.8% yield</div>
+      <div style="display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--t2)">
+        <div>VNQ — Real Estate REITs (30%)</div>
+        <div>SCHD — Dividend ETF (25%)</div>
+        <div>O — Realty Income/monthly (20%)</div>
+        <div>BND — Bond ETF (15%)</div>
+        <div>JEPI — Covered Calls (10%)</div>
+      </div>
+      <a href="https://fidelity.com" target="_blank" style="text-decoration:none;margin-top:10px;display:block"><button class="btn btn-full" style="background:var(--org);color:#000">Build Income Basket at Fidelity →</button></a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ MASTERS ══════════════════════ -->
+<div id="p-masters" class="panel">
+  <div class="ph"><h1>🎓 Master Investor Library</h1><p>The complete philosophies, key books, and strategies of the world's greatest investors — with AI applying their wisdom to your portfolio.</p></div>
+
+  <div style="display:flex;flex-direction:column;gap:14px">
+
+    <!-- TONY ROBBINS -->
+    <div class="master-card" style="border-color:rgba(255,79,79,.3)">
+      <div class="master-card::before" style="background:var(--red)"></div>
+      <div class="mc-avatar">🔥</div>
+      <div class="mc-name">Tony Robbins</div>
+      <div class="mc-title">Author — Financial Educator — Life Strategist</div>
+      <div class="mc-quote" style="border-color:var(--red)">"The secret of the wealthy isn't their investments — it's that they automate their investing before they spend."</div>
+      <div class="g3" style="gap:10px;margin-bottom:12px">
+        <div class="book-row" onclick="askBook('tony-money')"><span style="font-size:18px">📘</span><div><div style="font-size:12px;font-weight:700;color:var(--gold)">Money: Master the Game</div><div style="font-size:10.5px;color:var(--t2)">The 7 steps to financial freedom. All-Seasons Portfolio. How the rich really invest. Fee impact.</div></div></div>
+        <div class="book-row" onclick="askBook('tony-unshakeable')"><span style="font-size:18px">📗</span><div><div style="font-size:12px;font-weight:700;color:var(--grn)">Unshakeable</div><div style="font-size:10.5px;color:var(--t2)">Financial freedom playbook. How to be fearless during market crashes. The power of compounding.</div></div></div>
+        <div class="book-row" onclick="askBook('tony-holygrail')"><span style="font-size:18px">📕</span><div><div style="font-size:12px;font-weight:700;color:var(--pur)">The Holy Grail of Investing</div><div style="font-size:10.5px;color:var(--t2)">Co-written with Christopher Zook. Alternative assets. Private equity. What billionaires really invest in.</div></div></div>
+      </div>
+      <div class="mc-rule">Automate investing before you spend — set up recurring investments first, then live on what's left.</div>
+      <div class="mc-rule">All-Seasons Portfolio: 30% stocks, 40% long-term bonds, 15% intermediate bonds, 7.5% gold, 7.5% commodities. Designed to win in ANY economic climate.</div>
+      <div class="mc-rule">Fee impact: A 1% fee over 40 years costs you 28% of your final wealth. Use index funds.</div>
+      <div class="mc-rule">Volatility is your friend when dollar-cost averaging. Market drops are sales — buy more.</div>
+      <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn btn-sm" style="background:var(--red);color:#fff" onclick="applyMaster('robbins')">Apply Robbins Strategy to My Numbers</button>
+        <a href="https://www.tonyrobbins.com" target="_blank" style="text-decoration:none"><button class="btn btn-sm btn-ghost">TonyRobbins.com →</button></a>
+      </div>
+    </div>
+
+    <!-- JOHN BOGLE -->
+    <div class="master-card" style="border-color:rgba(176,132,255,.3)">
+      <div class="mc-avatar">🏆</div>
+      <div class="mc-name">John C. Bogle</div>
+      <div class="mc-title">Founder of Vanguard · Invented the Index Fund · "Saint Jack"</div>
+      <div class="mc-quote" style="border-color:var(--pur)">"Don't look for the needle in the haystack. Just buy the haystack."</div>
+      <div class="g2" style="gap:10px;margin-bottom:12px">
+        <div class="book-row" onclick="askBook('bogle-common')"><span style="font-size:18px">📘</span><div><div style="font-size:12px;font-weight:700;color:var(--pur)">The Little Book of Common Sense Investing</div><div style="font-size:10.5px;color:var(--t2)">The only investing strategy you'll ever need: just buy the entire market via index funds and stay the course.</div></div></div>
+        <div class="book-row" onclick="askBook('bogle-stay')"><span style="font-size:18px">📗</span><div><div style="font-size:12px;font-weight:700;color:var(--grn)">Stay the Course</div><div style="font-size:10.5px;color:var(--t2)">The story of Vanguard. Why low-cost index investing is mathematically proven to beat most active managers.</div></div></div>
+      </div>
+      <div class="mc-rule">Buy VOO, VTI, or FZROX (total market). These beat 92% of professional fund managers over 20 years.</div>
+      <div class="mc-rule">Costs are the enemy. Every 1% in fees per year costs you 40% of your wealth over 40 years.</div>
+      <div class="mc-rule">"Stay the course." Don't sell during crashes. The market always recovers. Investors who trade the most earn the least.</div>
+      <div class="mc-rule">Age-in-bonds rule: hold roughly your age % in bonds. At 35: 35% bonds, 65% stocks.</div>
+      <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn btn-sm btn-pur" onclick="applyMaster('bogle')">Apply Bogle Index Strategy</button>
+        <a href="https://www.vanguard.com" target="_blank" style="text-decoration:none"><button class="btn btn-sm btn-ghost">Open Vanguard →</button></a>
+      </div>
+    </div>
+
+    <!-- SIR JOHN TEMPLETON -->
+    <div class="master-card" style="border-color:rgba(247,201,72,.3)">
+      <div class="mc-avatar">🌍</div>
+      <div class="mc-name">Sir John Templeton</div>
+      <div class="mc-title">Pioneer of Global Investing · Forbes "Greatest Stock Picker of the Century"</div>
+      <div class="mc-quote" style="border-color:var(--gold)">"The time of maximum pessimism is the best time to buy, and the time of maximum optimism is the best time to sell."</div>
+      <div class="g2" style="gap:10px;margin-bottom:12px">
+        <div class="book-row" onclick="askBook('templeton-principles')"><span style="font-size:18px">📘</span><div><div style="font-size:12px;font-weight:700;color:var(--gold)">Templeton's Way with Money</div><div style="font-size:10.5px;color:var(--t2)">His 16 rules for investment success. How he turned $10K into $200M+ and then gave it all away.</div></div></div>
+        <div class="book-row" onclick="askBook('templeton-laws')"><span style="font-size:18px">📗</span><div><div style="font-size:12px;font-weight:700;color:var(--grn)">The Templeton Touch / Spiritual Laws of Success</div><div style="font-size:10.5px;color:var(--t2)">Investment philosophy and spiritual principles that guided the greatest investor and philanthropist.</div></div></div>
+      </div>
+      <div class="mc-rule"><strong>The Maximum Pessimism Strategy:</strong> When everyone is selling and scared — that's when Templeton bought. He bought European stocks during WWII and made a fortune.</div>
+      <div class="mc-rule">Diversify globally. Don't just own US stocks — the world has other great businesses. VEA and VWO ETFs capture this today.</div>
+      <div class="mc-rule"><strong>Give to grow:</strong> Templeton gave away over $1 billion. He believed generosity and financial success reinforce each other.</div>
+      <div class="mc-rule">Look for bargains in industries and countries everyone else has given up on. Contrarian investing is deeply profitable over time.</div>
+      <div class="mc-rule">16 Rules: Invest for maximum total return. Invest — don't trade. Remain flexible. Buy during pessimism. Diversify. Search for value everywhere. Don't panic.</div>
+      <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn btn-sm btn-gold" onclick="applyMaster('templeton')">Apply Templeton Strategy</button>
+        <a href="https://www.templeton.org" target="_blank" style="text-decoration:none"><button class="btn btn-sm btn-ghost">John Templeton Foundation →</button></a>
+      </div>
+    </div>
+
+    <!-- WARREN BUFFETT -->
+    <div class="master-card" style="border-color:rgba(247,201,72,.2)">
+      <div class="mc-avatar">🦁</div>
+      <div class="mc-name">Warren Buffett</div>
+      <div class="mc-title">CEO Berkshire Hathaway · Net Worth $135B · "The Oracle of Omaha"</div>
+      <div class="mc-quote" style="border-color:var(--gold)">"Rule No. 1: Never lose money. Rule No. 2: Never forget Rule No. 1."</div>
+      <div class="mc-rule">Buy great businesses at fair prices and hold forever. Think like a business owner, not a speculator.</div>
+      <div class="mc-rule"><strong>For most people:</strong> "Just buy a low-cost S&P 500 index fund (VOO/SPY) and you'll beat most professionals." Even Buffett says this.</div>
+      <div class="mc-rule">Be fearful when others are greedy. Be greedy when others are fearful. Market panics are buying opportunities.</div>
+      <div class="mc-rule">Invest in what you understand. If you can't explain the business in 2 minutes, don't own the stock.</div>
+      <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn btn-sm btn-gold" onclick="applyMaster('buffett')">Apply Buffett Strategy</button>
+        <a href="https://www.berkshirehathaway.com/letters/letters.html" target="_blank" style="text-decoration:none"><button class="btn btn-sm btn-ghost">Buffett's Annual Letters →</button></a>
+      </div>
+    </div>
+
+    <!-- RAY DALIO -->
+    <div class="master-card" style="border-color:rgba(74,143,255,.3)">
+      <div class="mc-avatar">🌊</div>
+      <div class="mc-name">Ray Dalio</div>
+      <div class="mc-title">Founder Bridgewater Associates · World's Largest Hedge Fund</div>
+      <div class="mc-quote" style="border-color:var(--blu)">"Diversification is the Holy Grail of investing. You can have same return for much less risk."</div>
+      <div class="mc-rule">All-Weather Portfolio (same concept as Robbins' All-Seasons). Balance across stocks, bonds, gold, and commodities.</div>
+      <div class="mc-rule">Gold is real money. Keep 7.5–15% in gold (GLD) as protection against inflation and currency risk.</div>
+      <div class="mc-rule">Risk parity: balance RISK equally across asset classes, not just dollar amounts.</div>
+      <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn btn-sm btn-blu" onclick="applyMaster('dalio')">Apply Dalio Strategy</button>
+        <a href="https://www.youtube.com/watch?v=PHe0bXAIuk0" target="_blank" style="text-decoration:none"><button class="btn btn-sm btn-ghost">How Economy Works (video) →</button></a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MASTER AI RESULT -->
+  <div class="card" id="master-res" style="display:none"><div class="ch" id="master-t">Strategy Analysis</div><div id="master-c" style="font-size:12.5px;color:var(--t2);line-height:1.8;margin-top:8px"></div></div>
+  <div class="card">
+    <div class="ch">💬 Ask About Any Master's Strategy</div>
+    <div class="chips">
+      <div class="chip" onclick="sqMaster('Explain the Tony Robbins All-Seasons Portfolio step by step')">All-Seasons Portfolio</div>
+      <div class="chip" onclick="sqMaster('What is Sir John Templeton maximum pessimism strategy?')">Templeton strategy</div>
+      <div class="chip" onclick="sqMaster('What are John Bogles core investing rules from his books?')">Bogle rules</div>
+      <div class="chip" onclick="sqMaster('What is the Holy Grail of Investing by Tony Robbins about?')">Holy Grail book</div>
+      <div class="chip" onclick="sqMaster('What would Warren Buffett do with $1000 right now?')">Buffett with $1K</div>
+    </div>
+    <div class="chatbox" id="cb-main"></div>
+    <div class="cir"><input class="ci" id="ci-main" placeholder="Ask about any master investor..." onkeydown="if(event.key==='Enter')sendChat('main')"><button class="btn btn-gold" onclick="sendChat('main')">Ask ➤</button></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ FRIENDS ══════════════════════ -->
+<div id="p-friends" class="panel">
+  <div class="ph"><h1>👥 Friend Investment Group</h1><p>Invite friends to invest alongside you. Track everyone's progress together. <strong style="color:var(--red)">IMPORTANT: Download the disclaimer before inviting anyone.</strong></p></div>
+
+  <!-- LEGAL DISCLAIMER DOWNLOAD -->
+  <div class="disc-doc">
+    <div class="disc-title">⚠️ LEGAL DISCLAIMER — REQUIRED READING</div>
+    <div class="disc-body">
+      <p><strong>INVESTMENT RISK DISCLOSURE & DISCLAIMER OF LIABILITY</strong></p>
+      <p>By using APEX AI or participating in any investment group coordinated through this platform, you acknowledge and agree to the following:</p>
+      <p><strong>1. NOT FINANCIAL ADVICE:</strong> APEX AI is an educational and informational tool only. Nothing provided by APEX AI constitutes investment advice, financial advice, legal advice, or tax advice. All information is for educational purposes only.</p>
+      <p><strong>2. RISK OF LOSS:</strong> All investments involve risk, including the possible loss of the entire principal amount invested. Past performance is not indicative of future results. Stock prices, ETF values, REIT distributions, and all other investment returns can go up or down and may be worth less than originally invested.</p>
+      <p><strong>3. NO LIABILITY FOR LOSSES:</strong> The creator, developer, or any person sharing this APEX AI tool is NOT responsible for any financial losses, investment decisions, or outcomes made by any user or group member. Each person is solely responsible for their own investment decisions.</p>
+      <p><strong>4. GROUP INVESTING DISCLAIMER:</strong> If you share this tool with friends, each member independently accepts full responsibility for their own investment decisions. No individual sharing this tool is acting as a licensed investment advisor, broker-dealer, or financial planner unless separately licensed.</p>
+      <p><strong>5. CONSULT A PROFESSIONAL:</strong> Before making investment decisions, consult a licensed financial advisor, CPA, or attorney who can evaluate your specific financial situation.</p>
+      <p><strong>6. NOT A REGISTERED INVESTMENT ADVISOR:</strong> APEX AI and its creator are not registered with the SEC, FINRA, or any state securities regulator as an investment advisor or broker-dealer.</p>
+    </div>
+    <div class="disc-sign">
+      <div style="font-size:11px;color:var(--t2);margin-bottom:8px">Download this disclaimer to share with anyone you invite. Each person should read it before using APEX AI for investment decisions.</div>
+      <button class="btn btn-dl btn-lg btn-full" onclick="downloadDisclaimer()">📥 Download Disclaimer PDF (Share with Friends)</button>
+    </div>
+  </div>
+
+  <!-- FRIEND TRACKER -->
+  <div class="card">
+    <div class="ch">👥 Friend Investment Group Tracker</div>
+    <div class="cs">Each person enters their own balance — this is for motivation and accountability only, not pooled investing</div>
+    <div class="alert warn" style="margin-bottom:12px"><span class="ai-ico">⚠️</span><div>This is NOT a pooled investment fund. Everyone invests in their own individual accounts. This tracker is just for seeing progress together and staying motivated.</div></div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+      <input class="fi" id="f-name" placeholder="Friend's name" style="max-width:180px">
+      <input class="fi" id="f-bal" type="number" placeholder="Their starting balance ($)" style="max-width:180px">
+      <input class="fi" id="f-goal" type="number" placeholder="Their goal amount ($)" style="max-width:180px">
+      <button class="btn btn-grn" onclick="addFriend()">+ Add Member</button>
+    </div>
+    <div id="friend-list" style="display:flex;flex-direction:column;gap:7px"></div>
+    <div id="group-total-box" style="display:none;margin-top:12px;padding:14px;background:var(--card2);border:1px solid rgba(0,212,138,.2);border-radius:10px">
+      <div style="font-size:9.5px;font-weight:800;color:var(--grn);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Group Combined Portfolio</div>
+      <div style="font-family:'DM Mono';font-size:26px;font-weight:700;color:var(--grn)" id="group-total">$0</div>
+      <div style="font-size:11.5px;color:var(--t2);margin-top:4px" id="group-note"></div>
+    </div>
+  </div>
+
+  <!-- GROUP AI CHAT -->
+  <div class="card">
+    <div class="ch">🤖 Group Investment AI</div>
+    <div class="cs">Get AI advice for your group's collective goals</div>
+    <div class="chips">
+      <div class="chip" onclick="sq2('Our group wants to all invest in the same ETF together for motivation. What is best?')">Best group ETF?</div>
+      <div class="chip" onclick="sq2('How do we stay accountable to each other as an investment group?')">Accountability tips?</div>
+      <div class="chip" onclick="sq2('What should each group member learn first about investing?')">Where to start?</div>
+    </div>
+    <div class="chatbox" id="cb-group"></div>
+    <div class="cir"><input class="ci" id="ci-group" placeholder="Ask about group investing strategies..." onkeydown="if(event.key==='Enter')sendChat('group')"><button class="btn btn-grn" onclick="sendChat('group')">Ask ➤</button></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ TAXES ══════════════════════ -->
+<div id="p-taxes" class="panel">
+  <div class="ph"><h1>💜 Tax Benefits</h1><p>Every legal way to keep more of your money. Educational info only — always consult a CPA.</p></div>
+  <div class="alert" style="background:var(--pud);border:1px solid rgba(176,132,255,.2);color:var(--pur);font-size:11px"><span class="ai-ico">⚠️</span>Educational information only. Consult a licensed CPA for your specific tax situation.</div>
+  <div class="g3">
+    <div style="background:var(--card2);border:1px solid rgba(176,132,255,.25);border-radius:11px;padding:14px"><div style="font-size:18px;margin-bottom:6px">📘</div><div style="font-family:'Instrument Serif',serif;font-size:15px;color:var(--pur);margin-bottom:4px">Traditional IRA</div><div style="font-size:11.5px;color:var(--t2);line-height:1.6">$7,000/year. Tax-deductible NOW. 22% bracket = <strong style="color:var(--text)">$1,540 saved this year</strong>.</div><a href="https://robinhood.com" target="_blank" style="text-decoration:none;margin-top:8px;display:block"><button class="btn btn-sm btn-pur btn-full">Open at Robinhood →</button></a></div>
+    <div style="background:var(--card2);border:1px solid rgba(0,212,138,.25);border-radius:11px;padding:14px"><div style="font-size:18px;margin-bottom:6px">📗</div><div style="font-family:'Instrument Serif',serif;font-size:15px;color:var(--grn);margin-bottom:4px">Roth IRA</div><div style="font-size:11.5px;color:var(--t2);line-height:1.6">$7,000/year. No deduction now. Growth is <strong style="color:var(--text)">100% tax-free forever</strong>. $7K/yr × 30yr × 8% = $793K tax-free.</div><a href="https://fidelity.com" target="_blank" style="text-decoration:none;margin-top:8px;display:block"><button class="btn btn-sm btn-grn btn-full">Open at Fidelity →</button></a></div>
+    <div style="background:var(--card2);border:1px solid rgba(247,201,72,.25);border-radius:11px;padding:14px"><div style="font-size:18px;margin-bottom:6px">🏦</div><div style="font-family:'Instrument Serif',serif;font-size:15px;color:var(--gold);margin-bottom:4px">Ascensus 401k</div><div style="font-size:11.5px;color:var(--t2);line-height:1.6">Already enrolled! Max is <strong style="color:var(--text)">$23,000/year</strong>. Always get the full employer match — that's free money every paycheck.</div><a href="https://ascensus.com" target="_blank" style="text-decoration:none;margin-top:8px;display:block"><button class="btn btn-sm btn-gold btn-full">Log into Ascensus →</button></a></div>
+  </div>
+  <div class="card"><div class="ch">🤖 Ask About Your Taxes</div>
+    <div class="chips"><div class="chip" onclick="sq3('Should I choose Roth or Traditional IRA with my Ascensus 401k?')">Roth vs Traditional?</div><div class="chip" onclick="sq3('How do I do tax-loss harvesting?')">Tax-loss harvesting?</div><div class="chip" onclick="sq3('What is backdoor Roth IRA?')">Backdoor Roth?</div></div>
+    <div class="chatbox" id="cb-tax"></div>
+    <div class="cir"><input class="ci" id="ci-tax" placeholder="Any tax question..." onkeydown="if(event.key==='Enter')sendChat('tax')"><button class="btn btn-pur" onclick="sendChat('tax')">Ask ➤</button></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ GIVE ══════════════════════ -->
+<div id="p-give" class="panel">
+  <div class="ph"><h1>💚 Give Smart — Tax-Efficient Giving & Foundations</h1><p>Donating stock instead of cash gives you double the tax benefit. Here's the right way to give.</p></div>
+  <div class="alert ok"><span class="ai-ico">💡</span><div><strong>Sir John Templeton believed:</strong> Giving and wealth go together. He donated over $1 billion and continued to prosper. The Templeton Foundation continues his legacy of combining investment success with profound generosity.</div></div>
+  <div class="g2">
+    <div class="card"><div class="ch">Donate Appreciated Stock (Best Method)</div><div style="font-size:12px;color:var(--t2);line-height:1.7">Give stock directly to charity — avoid capital gains AND get the full deduction. Works at all major brokers. This is how wealthy donors give.</div>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:7px">
+        <a href="https://www.fidelitycharitable.org" target="_blank" style="text-decoration:none"><button class="btn btn-tel btn-full">Open Fidelity Charitable DAF (Free) →</button></a>
+        <a href="https://www.schwabcharitable.org" target="_blank" style="text-decoration:none"><button class="btn btn-outline btn-full">Schwab Charitable DAF →</button></a>
+      </div>
+    </div>
+    <div class="card"><div class="ch">Start a Private Foundation</div><div style="font-size:12px;color:var(--t2);line-height:1.7">Own your own nonprofit. Invest assets tax-free. Grant to any cause. Build a Templeton-style legacy. Practical at $250K+. Start with a DAF today while you build toward it.</div>
+      <div style="margin-top:10px"><a href="https://harborcompliance.com" target="_blank" style="text-decoration:none"><button class="btn btn-gold btn-full">Foundation Setup Guide →</button></a></div>
+    </div>
+  </div>
+  <div class="card"><div class="ch">🤖 Giving & Foundation AI</div>
+    <div class="chips"><div class="chip" onclick="sq4('How do I donate stock to charity for maximum tax benefit?')">Donate stock?</div><div class="chip" onclick="sq4('How do I start a foundation like Sir John Templeton?')">Templeton foundation?</div><div class="chip" onclick="sq4('What is a Donor-Advised Fund and how does it work?')">What is a DAF?</div></div>
+    <div class="chatbox" id="cb-give"></div>
+    <div class="cir"><input class="ci" id="ci-give" placeholder="Ask about giving or foundations..." onkeydown="if(event.key==='Enter')sendChat('give')"><button class="btn btn-tel" onclick="sendChat('give')">Ask ➤</button></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ PORTFOLIO ══════════════════════ -->
+<div id="p-portfolio" class="panel">
+  <div class="ph"><h1>💼 My Portfolio</h1><p>All your holdings with live prices and AI recommendations.</p></div>
+  <div class="g4">
+    <div class="stat gold"><div class="sl">Total Portfolio</div><div class="sv">$<span id="pf-total">0</span></div><div class="sc neu">From your accounts</div></div>
+    <div class="stat grn"><div class="sl">Ascensus 401k</div><div class="sv">$<span id="pf-asc">0</span></div><div class="sc up">Tax-advantaged</div></div>
+    <div class="stat pur"><div class="sl">Tax Savings Est</div><div class="sv">$0</div><div class="sc" style="color:var(--pur)">This year</div></div>
+    <div class="stat tel"><div class="sl">Dividends/yr Est</div><div class="sv">$0</div><div class="sc" style="color:var(--tel)">Passive income</div></div>
+  </div>
+  <div class="card"><div class="ch">Holdings — AI Status</div>
+    <table class="dt"><thead><tr><th>Asset</th><th>Type</th><th>Value</th><th>Change</th><th>Tax Note</th><th>AI Says</th></tr></thead>
+    <tbody id="holdings-tbody">
+      <tr><td colspan="6" style="text-align:center;color:var(--t2);padding:20px">Enter your account balances in <button onclick="go('accounts')" style="background:none;border:none;color:var(--gold);cursor:pointer;font-weight:700">My Accounts →</button></td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- ══════════════════════ AI ADVISOR ══════════════════════ -->
+<div id="p-ai" class="panel">
+  <div class="ph"><h1>🤖 APEX AI Advisor</h1><p>Ask anything — live markets, master strategies, taxes, giving, your numbers. All explained simply.</p></div>
+  <div class="card">
+    <div class="chips">
+      <div class="chip" onclick="sq('What is the Tony Robbins All-Seasons Portfolio and how do I build it?')">All-Seasons Portfolio</div>
+      <div class="chip" onclick="sq('What are Sir John Templeton top investing rules?')">Templeton rules</div>
+      <div class="chip" onclick="sq('John Bogle says just buy index funds — should I?')">Just buy index funds?</div>
+      <div class="chip" onclick="sq('How should I set up my Ascensus 401k investments?')">Set up my 401k</div>
+      <div class="chip" onclick="sq('What is the best first step to start investing with $100?')">Start with $100</div>
+      <div class="chip" onclick="sq('How does compound interest actually work — show me an example')">Compound interest?</div>
+    </div>
+    <div class="chatbox" id="cb-ai2"></div>
+    <div class="cir"><input class="ci" id="ci-ai2" placeholder="Ask anything — investing, taxes, giving, strategies..." onkeydown="if(event.key==='Enter')sendChat('ai2')"><button class="btn btn-gold" onclick="sendChat('ai2')">Ask ➤</button></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ GOALS ══════════════════════ -->
+<div id="p-goals" class="panel">
+  <div class="ph"><h1>🎯 Goals</h1><p>Set a goal, AI builds a complete plan including basket, account, and tax strategy.</p></div>
+  <div class="g2">
+    <div class="card">
+      <div class="frow"><div class="fl">Goal</div><select class="fi" id="g-t"><option>🏖️ Retirement</option><option>🏠 House Down Payment</option><option>🎓 Education</option><option>💰 Wealth Building</option><option>🏛️ Foundation Fund</option></select></div>
+      <div class="frow"><div class="fl">Target ($)</div><input class="fi" type="number" value="100000" id="g-a"></div>
+      <div class="frow"><div class="fl">Target Date</div><input class="fi" type="date" value="2035-01-01" id="g-d"></div>
+      <div class="frow"><div class="fl">Monthly contribution ($)</div><input class="fi" type="number" value="200" id="g-m"></div>
+      <button class="btn btn-gold btn-lg btn-full" onclick="createGoal()">🎯 Build My Complete Plan</button>
+    </div>
+    <div class="card" id="goal-res" style="display:none"><div class="ch" id="goal-t">Your Plan</div><div id="goal-c" style="font-size:12.5px;color:var(--t2);line-height:1.75;margin-top:6px"></div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ RISK ══════════════════════ -->
+<div id="p-risk" class="panel">
+  <div class="ph"><h1>🛡️ Risk Manager</h1><p>Know your risk. Sleep well at night.</p></div>
+  <div class="g2">
+    <div class="card"><div class="ch">📊 Portfolio Risk Assessment</div><div class="frow" style="margin-top:10px"><div class="fl">Your risk comfort level</div><select class="fi" id="r-sel"><option>😌 Low — I hate losing money</option><option selected>😐 Moderate — Some swings are OK</option><option>😤 High — I can handle big drops</option></select></div><button class="btn btn-gold btn-full" onclick="checkRisk()">Analyze My Risk</button></div>
+    <div class="card" id="risk-out"><div class="ch">💡 Recommendations</div><div id="risk-c" style="font-size:12.5px;color:var(--t2);line-height:1.75;margin-top:6px">Click "Analyze" above.</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ LEARN ══════════════════════ -->
+<div id="p-learn" class="panel">
+  <div class="ph"><h1>📚 Learn Investing</h1><p>Everything explained like a smart friend — not a textbook.</p></div>
+  <div class="g3" id="learn-grid"></div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /shell -->
+
+<script>
+// ═══════════════ LIVE MARKET DATA ═══════════════
+const PROXY = "https://api.allorigins.win/get?url=";
+const YH = "https://query1.finance.yahoo.com/v8/finance/chart/";
+const DEMO = {
+  NVDA:{p:882.36,c:+4.18,cp:+0.48},AAPL:{p:211.45,c:+1.23,cp:+0.58},
+  MSFT:{p:423.10,c:+2.45,cp:+0.58},TSLA:{p:308.92,c:-3.12,cp:-1.00},
+  AMZN:{p:191.30,c:+2.87,cp:+1.52},SPY:{p:568.42,c:+3.21,cp:+0.57},
+  VOO:{p:471.18,c:+2.84,cp:+0.61},VNQ:{p:87.64,c:+0.42,cp:+0.48},
+  GLD:{p:196.85,c:+1.14,cp:+0.58},QQQ:{p:449.22,c:+3.80,cp:+0.85},
+  META:{p:506.44,c:+4.22,cp:+0.84},GOOGL:{p:172.18,c:+1.44,cp:+0.84},
+  "BTC-USD":{p:67420,c:+1240,cp:+1.87},O:{p:57.82,c:+0.24,cp:+0.42},
+  BND:{p:73.20,c:+0.08,cp:+0.11},DIA:{p:396.20,c:+1.20,cp:+0.30},
+  SCHD:{p:28.90,c:+0.14,cp:+0.49},TLT:{p:97.40,c:-0.60,cp:-0.61},
+};
+let LD = {...DEMO};
+
+async function fetchPrice(sym) {
+  try {
+    const url = `${YH}${encodeURIComponent(sym)}?interval=1d&range=1d`;
+    const r = await fetch(`${PROXY}${encodeURIComponent(url)}`);
+    const j = await r.json();
+    const d = JSON.parse(j.contents);
+    const m = d?.chart?.result?.[0]?.meta;
+    if (!m) return null;
+    const p = m.regularMarketPrice, prev = m.previousClose||m.chartPreviousClose;
+    return {p, c:p-prev, cp:(p-prev)/prev*100};
+  } catch {return null;}
+}
+
+async function loadMarket() {
+  const syms = ['SPY','NVDA','AAPL','MSFT','TSLA','AMZN','VOO','QQQ','VNQ','GLD','META','O','BND'];
+  const res = await Promise.allSettled(syms.map(s=>fetchPrice(s)));
+  res.forEach((r,i)=>{if(r.status==='fulfilled'&&r.value) LD[syms[i]]=r.value;});
+  updateTicker();
+  // Only update idx-grid if it exists (Markets panel)
+  if(document.getElementById('idx-grid')) buildIdx();
+  // Only update all-q-grid if it exists
+  if(document.getElementById('all-q-grid')) buildAllQ();
+  // Only update dash-movers if it exists
+  if(document.getElementById('dash-movers')) buildDashMovers();
+  // Safe DOM updates
+  const luEl=document.getElementById('last-upd');
+  if(luEl) luEl.textContent='Updated: '+new Date().toLocaleTimeString();
+  const spyEl=document.getElementById('dash-spy');
+  if(spyEl) spyEl.textContent=f$(LD.SPY?.p||568.42);
+  const sc=document.getElementById('dash-sc');
+  if(sc){sc.textContent=fPct(LD.SPY?.cp||0.57);sc.className='sc '+(LD.SPY?.c>=0?'up':'dn');}
+}
+
+function f$(n){return n>=1000?'$'+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','):'$'+n.toFixed(2)}
+function fC(d){return(d>=0?'+':'')+d.toFixed(2)}
+function fPct(d){return(d>=0?'+':'')+d.toFixed(2)+'%'}
+
+function updateTicker(){
+  // Direct, clean ID lookups — no string construction bugs
+  const pairs=[
+    ['t-nvda','tc-nvda','NVDA'],['t-aapl','tc-aapl','AAPL'],['t-msft','tc-msft','MSFT'],
+    ['t-tsla','tc-tsla','TSLA'],['t-spy','tc-spy','SPY'],['t-voo','tc-voo','VOO'],
+    ['t-vnq','tc-vnq','VNQ'],['t-gld','tc-gld','GLD'],['t-qqq','tc-qqq','QQQ'],
+    ['t-meta','tc-meta','META'],['t-amzn','tc-amzn','AMZN'],['t-o','tc-o','O'],
+    ['t-bnd','tc-bnd','BND'],['t-btc','tc-btc','BTC-USD'],
+    ['t2-nvda','tc2-nvda','NVDA'],['t2-spy','tc2-spy','SPY'],
+    ['t2-aapl','tc2-aapl','AAPL'],['t2-qqq','tc2-qqq','QQQ'],
+  ];
+  pairs.forEach(([pid,cid,sym])=>{
+    const d=LD[sym]||DEMO[sym]; if(!d) return;
+    const pe=document.getElementById(pid), ce=document.getElementById(cid);
+    if(pe) pe.textContent=f$(d.p);
+    if(ce){ce.textContent=fPct(d.cp); ce.className='ti-c '+(d.c>=0?'up':'dn');}
+  });
+}
+
+function buildIdx(){
+  const idxEl=document.getElementById('idx-grid'); if(!idxEl) return;
+  const items=[{sym:'SPY',lbl:'S&P 500'},{sym:'QQQ',lbl:'Nasdaq'},{sym:'GLD',lbl:'Gold'},{sym:'BND',lbl:'Bonds'}];
+  idxEl.innerHTML=items.map(i=>{
+    const d=LD[i.sym]||DEMO[i.sym];const up=d.c>=0;
+    return `<div class="stat ${up?'grn':'red'}"><div class="sl"><span class="ldot"></span> ${i.lbl}</div><div class="sv">${f$(d.p)}</div><div class="sc ${up?'up':'dn'}">${fPct(d.cp)} today</div></div>`;
+  }).join('');
+}
+
+function buildDashMovers(){
+  const dmEl=document.getElementById('dash-movers'); if(!dmEl) return;
+  const items=['NVDA','AAPL','SPY','VNQ'];
+  dmEl.innerHTML=items.map(s=>{
+    const d=LD[s]||DEMO[s];const up=d.c>=0;
+    return `<div class="qc"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="qc-t">${s}</div><div class="qc-n">${{NVDA:'NVIDIA',AAPL:'Apple',SPY:'S&P 500',VNQ:'Real Estate'}[s]}</div></div><div><div class="qc-p">${f$(d.p)}</div><div class="qc-c ${up?'up':'dn'}">${fPct(d.cp)}</div></div></div><div class="qc-bar"><div class="qc-f" style="width:${Math.min(Math.abs(d.cp)*15+20,90)}%;background:${up?'var(--grn)':'var(--red)'}"></div></div></div>`;
+  }).join('');
+}
+
+const ASSETS=[
+  {s:'NVDA',n:'NVIDIA',t:'stocks'},{s:'AAPL',n:'Apple',t:'stocks'},{s:'MSFT',n:'Microsoft',t:'stocks'},{s:'TSLA',n:'Tesla',t:'stocks'},{s:'META',n:'Meta',t:'stocks'},
+  {s:'VOO',n:'S&P 500 ETF',t:'etf'},{s:'QQQ',n:'Nasdaq ETF',t:'etf'},{s:'SCHD',n:'Dividend ETF',t:'etf'},{s:'VTI',n:'Total Market',t:'etf'},
+  {s:'VNQ',n:'Real Estate REIT',t:'reit'},{s:'O',n:'Realty Income',t:'reit'},
+  {s:'BND',n:'Total Bond ETF',t:'bonds'},{s:'TLT',n:'Treasury Bonds',t:'bonds'},
+  {s:'GLD',n:'Gold ETF',t:'commodity'},{'s':'BTC-USD',n:'Bitcoin',t:'crypto'},
+];
+function buildAllQ(f='all'){
+  const items=f==='all'?ASSETS:ASSETS.filter(a=>a.t===f);
+  document.getElementById('all-q-grid').innerHTML=items.map(a=>{
+    const d=LD[a.s]||DEMO[a.s]||{p:0,c:0,cp:0};const up=d.c>=0;
+    return `<div class="qc"><div style="display:flex;justify-content:space-between"><div><div class="qc-t">${a.s}</div><div class="qc-n">${a.n}</div></div><div><div class="qc-p">${f$(d.p)}</div><div class="qc-c ${up?'up':'dn'}">${fPct(d.cp)}</div></div></div><div class="qc-bar"><div class="qc-f" style="width:60%;background:${up?'var(--grn)':'var(--red)'}"></div></div><div style="font-size:10px;color:var(--t2);margin-top:5px">Min: <span style="color:var(--grn)">$1</span> • Fractional</div></div>`;
+  }).join('');
+}
+// buildAllQ called safely from loadMarket (guarded) and when Markets panel opens
+function initMarketsPanel(){buildIdx();buildAllQ();}
+
+async function lookupQ(){
+    const s=document.getElementById('qs').value.trim().toUpperCase(); if(!s) return;
+  const res=document.getElementById('q-result');
+  res.innerHTML='<div style="display:flex;gap:8px;align-items:center;padding:12px 0"><div class="td"></div><div class="td"></div><div class="td"></div><span style="color:var(--t2);font-size:12px">Fetching live price and AI analysis for '+s+'...</span></div>';
+  let d=await fetchPrice(s)||DEMO[s]||{p:0,c:0,cp:0};
+  const up=d.c>=0;
+  const tip=await aiCall("Give a 2-sentence plain-English summary of "+s+" — what it is and whether it looks like a good investment right now. Be direct and simple.");
+  res.innerHTML=`<div style="background:var(--bg3);border:1px solid ${up?'rgba(0,212,138,.3)':'rgba(255,79,79,.3)'};border-radius:10px;padding:13px;margin-top:8px;animation:fu .2s ease">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+      <div style="font-family:'Instrument Serif',serif;font-size:19px">${s}</div>
+      <div style="text-align:right"><div style="font-family:'DM Mono';font-size:19px;font-weight:700">${f$(d.p)}</div><div class="${up?'up':'dn'}" style="font-size:11.5px;font-weight:600">${fC(d.c)} (${fPct(d.cp)})</div></div>
+    </div>
+    <div style="font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:10px">${fmt(tip)}</div>
+    <div style="display:flex;gap:7px"><button class="btn btn-gold btn-sm" onclick="go('baskets')">Invest Now →</button></div>
+  </div>`;
+}
+function setQ(s){document.getElementById('qs').value=s;lookupQ();}
+
+loadMarket(); setInterval(loadMarket, 60000);
+
+// ═══════════════ CLAUDE AI ═══════════════
+// ═══════════════════════════════════════════════════════════
+// APEX AI ENGINE — Works in Claude.ai AND standalone hosting
+// ═══════════════════════════════════════════════════════════
+const SYS = "You are APEX AI, a friendly personal finance advisor. Explain everything in plain simple English. You know Tony Robbins (All-Seasons Portfolio, Money Master the Game, Unshakeable, Holy Grail of Investing), John Bogle (index funds, stay the course), Sir John Templeton (maximum pessimism strategy), Warren Buffett, Ray Dalio. Keep answers under 200 words. Be warm and specific. End with: This is education only — consult a licensed financial advisor for personal advice.";
+const SYS_MASTERS = "You are APEX AI. Explain strategies of Tony Robbins (All-Seasons Portfolio, Money Master the Game, Unshakeable, Holy Grail of Investing), John Bogle (index funds, Little Book of Common Sense Investing), Sir John Templeton (maximum pessimism, 16 rules), Buffett, Dalio. Plain English only. Under 200 words.";
+const SYS_TAX = "You are APEX AI tax education. Explain IRAs, 401k, capital gains, tax-loss harvesting, deductions plainly. Always note: consult a CPA for personal advice. Under 200 words.";
+const SYS_GIVE = "You are APEX AI explaining charitable giving — donating appreciated stock, Donor-Advised Funds, private foundations, tax benefits. Mention Sir John Templeton legacy giving. Plain English. Under 200 words.";
+const SYS_GROUP = "You are APEX AI helping friend investment groups. Give accountability tips, beginner strategies, index funds, ETFs. Plain English. Under 200 words.";
+
+// Smart fallback answers — used when API unavailable (standalone hosting)
+const FALLBACK = {
+  default: "Great question! Here are the key principles:\n\n**Start simple:** The most proven strategy is investing regularly in low-cost index funds like VOO (S&P 500) or VTI (total market). John Bogle said: just buy the haystack.\n\n**Tony Robbins All-Seasons Portfolio:** 30% stocks, 40% long-term bonds, 15% intermediate bonds, 7.5% gold, 7.5% commodities. Grows in any economic climate.\n\n**Sir John Templeton rule:** Buy at maximum pessimism — when everyone is scared and selling, that is the best time to buy.\n\n**Tax tip:** Max your Ascensus 401k first (get the free employer match), then open a Roth IRA — $7,000/year grows 100% tax-free forever.\n\n*This is education only — consult a licensed financial advisor for personal advice.*",
+  tax: "Key tax strategies:\n\n**Roth IRA:** $7,000/year, grows completely tax-free. Best if you expect to earn more later. Open free at Fidelity or Robinhood.\n\n**Traditional IRA:** $7,000/year, tax-deductible NOW. At 22% bracket you save $1,540 this year.\n\n**Ascensus 401k:** Always get the full employer match — it is free money. Max is $23,000/year.\n\n**Tax-loss harvesting:** Sell a losing stock to lock in the loss on paper, then buy a similar ETF. That loss reduces your tax bill.\n\n**Donate stock, not cash:** Give appreciated stock to charity — avoid capital gains AND get the full deduction.\n\n*Consult a CPA for your specific tax situation.*",
+  give: "Smart giving strategies:\n\n**Never donate cash if you have appreciated stock.** Donate stock directly — you avoid capital gains tax AND get a deduction for the full current value. Double benefit.\n\n**Donor-Advised Fund (DAF):** Open free at Fidelity Charitable. Put money in now, get the deduction now, give to any charity on your own timeline.\n\n**Sir John Templeton** gave away over $1 billion and continued to prosper. He believed generosity and financial success reinforce each other.\n\n**Private Foundation:** For $250K+. Full control, invest assets tax-free, build a lasting legacy.\n\n*Consult a nonprofit attorney for foundation setup.*",
+  masters: "The master investors in plain English:\n\n**Tony Robbins (All-Seasons):** 30% stocks + 40% long bonds + 15% mid bonds + 7.5% gold + 7.5% commodities. Works in inflation, deflation, growth, and recession.\n\n**John Bogle:** Just buy VOO or VTI. They beat 92% of professional managers over 20 years. Keep costs near zero.\n\n**Sir John Templeton:** Buy when everyone is panicking. He bought European stocks during WWII and made a fortune. Diversify globally.\n\n**Warren Buffett:** Buy great companies at fair prices and hold forever. For most people — just buy VOO.\n\n**Ray Dalio:** Balance risk across stocks, bonds, gold, and commodities.",
+  group: "Tips for investing as a group:\n\n**Rule #1:** Everyone invests in their OWN individual account — this is not a pooled fund. It is a group for motivation and accountability.\n\n**Best setup for beginners:** Each person opens a Roth IRA at Fidelity or Robinhood. Invest in VOO every month — even $25 matters.\n\n**Stay accountable:** Set a monthly check-in. Share your progress. Celebrate milestones.\n\n**John Bogle advice:** Stay the course. Do not panic-sell when markets drop. The investor who holds through crashes always wins long-term.\n\n**Download the disclaimer** from the Friends panel before discussing investments.",
+  risk: "Risk management basics:\n\n**Tony Robbins in Unshakeable:** Market crashes happen every few years — they are normal. Investors who panic-sell always lose. Stay invested.\n\n**Diversification:** Own stocks (VOO), bonds (BND), real estate (VNQ), and gold (GLD). When one drops, others often rise.\n\n**Ascensus 401k tip:** If you are young (20s-40s), choose a Target Date Fund matching your retirement year. It automatically adjusts risk as you age.\n\n**Stop-loss rule:** Never invest money you need in the next 1-2 years in stocks. Keep short-term money in high-yield savings.\n\n*This is education only — consult a licensed financial advisor for personal advice.*",
+};
+
+// ─── Core AI call function ────────────────────────────────
+async function aiCall(msg, sys) {
+  // Try the Anthropic API (works automatically in Claude.ai artifacts)
+  try {
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-5",
+        max_tokens: 1024,
+        system: sys || SYS,
+        messages: [{ role: "user", content: String(msg) }]
+      })
+    });
+    if (resp.ok) {
+      const data = await resp.json();
+      const text = data.content?.[0]?.text;
+      if (text) return text;
+    }
+  } catch(e) {
+    console.log("Direct API unavailable, using smart fallback");
+  }
+
+  // Smart fallback — rich pre-built answers that actually help
+  const q = msg.toLowerCase();
+  if (sys === SYS_TAX || q.includes("tax") || q.includes("ira") || q.includes("401")) return FALLBACK.tax;
+  if (sys === SYS_GIVE || q.includes("donat") || q.includes("found") || q.includes("charit")) return FALLBACK.give;
+  if (sys === SYS_MASTERS || q.includes("robbins") || q.includes("bogle") || q.includes("templeton") || q.includes("buffett") || q.includes("book")) return FALLBACK.masters;
+  if (sys === SYS_GROUP || q.includes("group") || q.includes("friend")) return FALLBACK.group;
+  if (q.includes("risk") || q.includes("safe") || q.includes("crash") || q.includes("loss")) return FALLBACK.risk;
+  return FALLBACK.default;
+}
+// Escape user input to prevent XSS in chat bubbles
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+// Format AI replies for innerHTML display — NO HTML escaping (content comes from Claude AI)
+function fmt(t){
+  if(!t) return '';
+  return t
+    .replace(/\*\*(.*?)\*\*/g,'<strong style="color:var(--gold)">$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/\n\n/g,'<br><br>')
+    .replace(/\n/g,'<br>');
+}
+
+// Multi-chat
+const CHATS={
+  main: {box:'cb-main', inp:'ci-main', sys:SYS_MASTERS},
+  group:{box:'cb-group',inp:'ci-group',sys:SYS_GROUP},
+  tax:  {box:'cb-tax',  inp:'ci-tax',  sys:SYS_TAX},
+  give: {box:'cb-give', inp:'ci-give', sys:SYS_GIVE},
+  ai2:  {box:'cb-ai2',  inp:'ci-ai2',  sys:SYS},
+};
+function initChat(id,msg){
+  const box=document.getElementById(CHATS[id]?.box);
+  if(box&&!box.children.length) box.innerHTML=`<div class="cm ai"><div class="cav">⚡</div><div class="cb">${msg}</div></div>`;
+}
+// Initialize all chat boxes immediately — no timeout needed since script is at bottom of body
+function initAllChats(){
+  initChat('main',"Hi! Ask me anything about Tony Robbins, Bogle, Templeton, Buffett — or any investing strategy. I explain everything simply! 🎓");
+  initChat('group',"Hi! Ask about group investing, accountability strategies, or where each member should start! 👥");
+  initChat('tax',"Tax questions answered simply — IRAs, 401k, capital gains, harvesting, deductions. 💜");
+  initChat('give',"Ask about giving strategies, Donor-Advised Funds, foundations, or Templeton-style legacy giving. 💚");
+  initChat('ai2',"Hi! I'm APEX AI. Ask me anything about investing, your accounts, market conditions, or any of the master investors. Everything explained in plain English! ⚡");
+}
+// Run immediately (script is at page bottom so DOM exists) AND re-run if panels load late
+initAllChats();
+// ── Chat routing helpers ──────────────────────────────────────
+// sqMaster: send to Masters panel chat (cb-main) — stays on Masters page
+function sqMaster(m){
+  const inp=document.getElementById('ci-main');
+  if(!inp) return;
+  inp.value=m;
+  sendChat('main');
+}
+// sq: send to AI Advisor chat (cb-ai2) — navigates to AI panel if needed
+function sq(m){
+  const inp=document.getElementById('ci-ai2');
+  if(!inp) return;
+  // If not on AI panel, switch to it first, then send after paint
+  const aiPanel=document.getElementById('p-ai');
+  if(aiPanel && !aiPanel.classList.contains('on')){
+    go('ai');
+    requestAnimationFrame(()=>{ inp.value=m; sendChat('ai2'); });
+  } else {
+    inp.value=m;
+    sendChat('ai2');
+  }
+}
+function sq2(m){document.getElementById('ci-group').value=m;sendChat('group');}
+function sq3(m){document.getElementById('ci-tax').value=m;sendChat('tax');}
+function sq4(m){document.getElementById('ci-give').value=m;sendChat('give');}
+async function sendChat(id='main'){
+  const cfg=CHATS[id];
+  if(!cfg){ console.warn('sendChat: unknown chat id:', id); return; }
+  const inp=document.getElementById(cfg.inp);
+  const box=document.getElementById(cfg.box);
+  if(!inp || !box){ console.warn('sendChat: missing elements for', id, cfg.inp, cfg.box); return; }
+  const t=inp.value.trim();
+  if(!t) return;
+  inp.value='';
+  inp.disabled=true;
+
+  // Add user message
+  const userDiv=document.createElement('div');
+  userDiv.className='cm u';
+  userDiv.innerHTML=`<div class="cav">👤</div><div class="cb">${escHtml(t)}</div>`;
+  box.appendChild(userDiv);
+
+  // Add typing indicator with unique id
+  const tid='msg'+Date.now()+Math.random().toString(36).slice(2,6);
+  const typingDiv=document.createElement('div');
+  typingDiv.className='cm ai';
+  typingDiv.id=tid;
+  typingDiv.innerHTML='<div class="cav">⚡</div><div class="cb" style="min-width:100px;color:var(--t2);font-size:11px"><div style="display:flex;gap:5px;align-items:center;padding:2px 0"><div class="td"></div><div class="td"></div><div class="td"></div><span style="margin-left:4px">Thinking...</span></div></div>';
+  box.appendChild(typingDiv);
+  box.scrollTop=box.scrollHeight;
+
+  try {
+    const reply=await aiCall(t, cfg.sys);
+    // Replace typing indicator — use reference not getElementById (safer after DOM changes)
+    const formatted=fmt(reply);
+    typingDiv.className='cm ai';
+    typingDiv.removeAttribute('id');
+    typingDiv.innerHTML=`<div class="cav">⚡</div><div class="cb">${formatted}</div>`;
+  } catch(err) {
+    typingDiv.innerHTML=`<div class="cav">⚡</div><div class="cb" style="color:var(--red)">⚠️ Could not get a response. Please check your connection and try again.</div>`;
+    console.error('sendChat error:', err);
+  } finally {
+    inp.disabled=false;
+    inp.focus();
+    box.scrollTop=box.scrollHeight;
+  }
+}
+
+// ═══════════════ NAVIGATION ═══════════════
+function go(name,navEl,sideEl){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  const el=document.getElementById('p-'+name); if(el) el.classList.add('on');
+  if(navEl){document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));navEl.classList.add('on');}
+  if(sideEl){document.querySelectorAll('.si').forEach(b=>b.classList.remove('on'));sideEl.classList.add('on');}
+  window.scrollTo(0,0);
+  // Init panels on demand
+  if(name==='markets') initMarketsPanel();
+  if(name==='autoinvest') setTimeout(buildAutoInvestAlloc,50);
+  if(name==='calculator') calcCompound();
+}
+
+// ═══════════════ ACCOUNTS ═══════════════
+function updatePortTotal(){
+  const asc=parseFloat(document.getElementById('bal-asc').value)||0;
+  const rh=parseFloat(document.getElementById('bal-rh').value)||0;
+  const ca=parseFloat(document.getElementById('bal-ca').value)||0;
+  const fid=parseFloat(document.getElementById('bal-fid').value)||0;
+  const oth=parseFloat(document.getElementById('bal-other').value)||0;
+  const cash=parseFloat(document.getElementById('bal-cash').value)||0;
+  const total=asc+rh+ca+fid+oth+cash;
+  document.getElementById('total-display').textContent='$'+total.toLocaleString();
+  let bd='';
+  if(asc>0) bd+=`Ascensus 401k: <strong style="color:var(--grn)">$${asc.toLocaleString()}</strong><br>`;
+  if(rh>0) bd+=`Robinhood: <strong style="color:var(--grn)">$${rh.toLocaleString()}</strong><br>`;
+  if(ca>0) bd+=`Cash App: <strong style="color:var(--grn)">$${ca.toLocaleString()}</strong><br>`;
+  if(fid>0) bd+=`Fidelity: <strong style="color:var(--grn)">$${fid.toLocaleString()}</strong><br>`;
+  if(oth>0) bd+=`Other: <strong style="color:var(--grn)">$${oth.toLocaleString()}</strong><br>`;
+  if(cash>0) bd+=`Cash to invest: <strong style="color:var(--gold)">$${cash.toLocaleString()}</strong>`;
+  document.getElementById('account-breakdown').innerHTML=bd||'Enter your balances above';
+  document.getElementById('port-total').textContent=total.toLocaleString();
+  document.getElementById('dash-port').textContent=total.toLocaleString();
+  document.getElementById('pf-total').textContent=total.toLocaleString();
+  document.getElementById('pf-asc').textContent=asc.toLocaleString();
+}
+function saveAccounts(){
+  const btn=document.querySelector('#p-accounts .btn-gold.btn-lg');
+  if(!btn) return;
+  btn.textContent='✅ Saved!'; btn.style.background='var(--grn)'; btn.disabled=true;
+  updatePortTotal();
+  setTimeout(()=>{btn.textContent='✅ Save My Balances';btn.style.background='';btn.disabled=false;},2000);
+}
+
+// ═══════════════ AUTO-INVEST AI ═══════════════
+function buildAutoInvestAlloc(){
+  const strat=document.getElementById('ai-strat')?.value||'';
+  const base=parseFloat(document.getElementById('ai-base')?.value)||100;
+  let allocs;
+  if(strat.includes('Growth')){allocs=[{n:'VOO — S&P 500',p:40,c:'var(--blu)'},{n:'QQQ — Nasdaq',p:25,c:'var(--pur)'},{n:'VTI — Total Market',p:20,c:'var(--grn)'},{n:'VEA — International',p:10,c:'var(--tel)'},{n:'BND — Bonds',p:5,c:'var(--gold)'}];}
+  else if(strat.includes('All-Seasons')){allocs=[{n:'VOO — US Stocks (30%)',p:30,c:'var(--blu)'},{n:'TLT — Long Bonds (40%)',p:40,c:'var(--gold)'},{n:'IEF — Mid Bonds (15%)',p:15,c:'var(--grn)'},{n:'GLD — Gold (7.5%)',p:7.5,c:'var(--gold)'},{n:'DJP — Commodities (7.5%)',p:7.5,c:'var(--org)'}];}
+  else if(strat.includes('Short')){allocs=[{n:'SHV — T-Bills',p:35,c:'var(--grn)'},{n:'BND — Bonds',p:25,c:'var(--tel)'},{n:'SCHD — Dividends',p:20,c:'var(--gold)'},{n:'HYSA — Cash',p:20,c:'var(--t2)'}];}
+  else if(strat.includes('Income')){allocs=[{n:'VNQ — REIT',p:30,c:'var(--org)'},{n:'SCHD — Dividends',p:25,c:'var(--gold)'},{n:'O — Monthly REIT',p:20,c:'var(--org)'},{n:'BND — Bonds',p:15,c:'var(--grn)'},{n:'JEPI — Covered Calls',p:10,c:'var(--pur)'}];}
+  else{allocs=[{n:'AI-Chosen Asset #1',p:35,c:'var(--pur)'},{n:'AI-Chosen Asset #2',p:30,c:'var(--blu)'},{n:'AI-Chosen ETF',p:25,c:'var(--grn)'},{n:'AI Safety Net',p:10,c:'var(--gold)'}];}
+  const cont=document.getElementById('ai-alloc-preview');
+  if(!cont) return;
+  cont.innerHTML=allocs.map(a=>`<div><div style="display:flex;justify-content:space-between;margin-bottom:3px;font-size:11.5px"><span>${a.n}</span><span style="font-family:'DM Mono';color:var(--gold)">$${Math.round(base*a.p/100)}</span></div><div class="pb"><div class="pf" style="width:${a.p}%;background:${a.c}"></div></div></div>`).join('');
+  // Projection
+  const mo=base*(document.getElementById('ai-freq')?.value?.includes('Weekly')?4.33:document.getElementById('ai-freq')?.value?.includes('Monthly')?1:2.17);
+  const p1=Math.round(mo*12*1.09), p5=Math.round(mo*60*1.09**2.5), p10=Math.round(mo*120*1.09**5);
+  const pc=document.getElementById('ai-projection');
+  if(pc) pc.innerHTML=`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--t2);font-size:12px">Year 1</span><span class="up" style="font-family:'DM Mono'">$${p1.toLocaleString()}</span></div><div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--t2);font-size:12px">Year 5</span><span class="up" style="font-family:'DM Mono'">$${p5.toLocaleString()}</span></div><div style="display:flex;justify-content:space-between;padding:6px 0"><span style="color:var(--t2);font-size:12px">Year 10</span><span style="color:var(--gold);font-weight:700;font-family:'DM Mono';font-size:15px">$${p10.toLocaleString()}</span></div>`;
+}
+// buildAutoInvestAlloc called on-demand from go() — safe
+
+async function runAIAnalysis(){
+  const dec=document.getElementById('ai-live-decision');
+  if(!dec){console.warn('runAIAnalysis: ai-live-decision not found');return;}
+  dec.className='ai-decision'; dec.textContent='🤖 APEX AI is analyzing live market conditions...';
+  const spy=LD.SPY||DEMO.SPY; const tsla=LD.TSLA||DEMO.TSLA; const nvda=LD.NVDA||DEMO.NVDA;
+  const sl=document.getElementById('sl-range')?.value||8;
+  const dip=document.getElementById('dip-range')?.value||5;
+  const strat=document.getElementById('ai-strat')?.value||'All-Seasons';
+  const base=document.getElementById('ai-base')?.value||100;
+  const aiPrompt = "Auto-Invest AI Decision: SPY="+f$(spy.p)+" ("+fPct(spy.cp)+"), NVDA="+f$(nvda.p)+" ("+fPct(nvda.cp)+"). Strategy="+strat+". Base=$"+base+". Stop-loss="+sl+"%. Buy-dip="+dip+"%. Should I: PROCEED normally, INCREASE (dip detected), PAUSE (stop-loss risk), or HOLD? Give your decision in bold then 2 sentences of plain-English reasoning.";
+  const reply=await aiCall(aiPrompt);
+  dec.className='ai-decision';
+  dec.innerHTML=fmt(reply.substring(0,600));
+  // Update log
+  const log=document.getElementById('ai-log');
+  if(log) log.innerHTML=`<div class="ai-decision">📡 ${new Date().toLocaleString()} — AI Analysis: ${reply.substring(0,150)}...</div>`+log.innerHTML;
+}
+
+async function activateAutoInvest(btn){
+  if(!btn) btn=document.querySelector('#p-autoinvest .btn-gold.btn-lg');
+  if(btn){btn.textContent='⚡ Analyzing...';btn.disabled=true;}
+  await runAIAnalysis();
+  if(btn){btn.textContent='✅ Auto-Invest AI Active!';btn.style.background='var(--grn)';}
+  const lbl=document.getElementById('ai-status-label'), sc=document.getElementById('ai-status-sc');
+  if(lbl) lbl.textContent='● Active';
+  if(sc) sc.textContent='Running automatically';
+  setTimeout(()=>{
+    if(btn){btn.textContent='✅ Activate Auto-Invest AI';btn.style.background='';btn.disabled=false;}
+  },3000);
+}
+function pauseAI(){const l=document.getElementById('ai-status-label'),s=document.getElementById('ai-status-sc');if(l)l.textContent='⏸ Paused';if(s)s.textContent='Click Activate to resume';}
+
+// ═══════════════ CALCULATOR ═══════════════
+function calcCompound(){
+  // Guard — only run if calculator panel elements exist
+  const startEl=document.getElementById('c-start'); if(!startEl) return;
+  const start=parseFloat(startEl.value)||0;
+  const mo=parseFloat(document.getElementById('c-mo').value)||100;
+  const rate=parseFloat(document.getElementById('c-rate').value)||9;
+  const years=parseInt(document.getElementById('c-years').value)||20;
+  const taxFactor=parseFloat(document.getElementById('c-acct').value)||1;
+  const r=rate/100/12;
+  let bal=start, totalInvested=start;
+  const bars=[];
+  for(let y=1;y<=years;y++){
+    for(let m=0;m<12;m++){bal=bal*(1+r)+mo;totalInvested+=mo;}
+    bars.push(bal);
+  }
+  const finalBal=bal*taxFactor;
+  const interest=finalBal-totalInvested;
+  const safe=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  safe('c-invested','$'+Math.round(totalInvested).toLocaleString());
+  safe('c-interest','$'+Math.round(Math.max(0,interest)).toLocaleString());
+  safe('c-total','$'+Math.round(finalBal).toLocaleString());
+  safe('real-invest-amt','$'+mo+'/month');
+  safe('c-mid-yr',Math.floor(years/2)+' yrs');
+  safe('c-end-yr',years+' yrs');
+  const chartEl=document.getElementById('calc-chart');
+  if(chartEl){
+    const maxBar=Math.max(...bars,1);
+    chartEl.innerHTML=bars.map((b,i)=>`<div class="cc-bar" style="height:${(b/maxBar*100).toFixed(1)}%;background:${i===bars.length-1?'var(--gold)':i>bars.length*0.7?'var(--grn)':'var(--blu)'}"></div>`).join('');
+  }
+}
+function setScenario(start,mo,rate,years){
+  document.getElementById('c-start').value=start;
+  document.getElementById('c-mo').value=mo;
+  document.getElementById('c-rate').value=rate;
+  document.getElementById('c-rate-d').textContent=rate+'%';
+  document.getElementById('c-years').value=years;
+  document.getElementById('c-yr-d').textContent=years+' years';
+  calcCompound();
+}
+// ═══════════════ SIMULATOR ═══════════════
+let simCash=10000,simTc=0,simPositions={};
+async function simT(dir){
+  const parts=document.getElementById('st').value.split('|');
+  const sym=parts[0], baseP=parseFloat(parts[1]);
+  const liveP=LD[sym]?.p||baseP;
+  const amt=parseFloat(document.getElementById('sa').value)||5;
+  if(amt<5){
+    document.getElementById('sim-coach').innerHTML='<div class="alert warn"><span class="ai-ico">⚠️</span>Minimum $5 — even in practice mode!</div>';
+    return;
+  }
+  if(dir==='buy'&&amt>simCash){
+    document.getElementById('sim-coach').innerHTML='<div class="alert warn"><span class="ai-ico">⚠️</span>Not enough practice cash! You have $'+simCash.toLocaleString()+'</div>';
+    return;
+  }
+  if(dir==='buy'){simCash-=amt;const sh=(amt/liveP);simPositions[sym]=(simPositions[sym]||0)+sh;}
+  simTc++;
+  document.getElementById('sim-cash').textContent=simCash.toLocaleString();
+  document.getElementById('sim-tc').textContent=simTc;
+  const tip=await aiCall("I just practice-"+dir+"-ed $"+amt+" of "+sym+". Give one short educational sentence about this as a learning experience.");
+  const coachEl=document.getElementById('sim-coach');
+  if(coachEl) coachEl.innerHTML=`<div class="alert ok" style="margin-bottom:6px"><span class="ai-ico">✅</span><strong>Practice ${dir}:</strong> ${(amt/liveP).toFixed(5)} shares of ${sym} at ${f$(liveP)}</div><div class="alert info"><span class="ai-ico">🤖</span>${fmt(tip)}</div>`;
+}
+function simReset(){simCash=10000;simTc=0;simPositions={};document.getElementById('sim-cash').textContent='10,000';document.getElementById('sim-tc').textContent='0';const sc2=document.getElementById('sim-coach');if(sc2)sc2.innerHTML='<div class="alert ok"><span class="ai-ico">🔄</span>Reset! $10,000 practice money restored. Try building a Robbins All-Seasons basket: VOO (30%), TLT (40%), BND (15%), GLD (7.5%), DJP (7.5%)</div>';}
+
+// ═══════════════ MASTERS ═══════════════
+const bookPrompts={
+  'tony-money':'Explain the key lessons from Tony Robbins "Money: Master the Game" — specifically: the 7 steps, the All-Seasons Portfolio, and the biggest insight about fees. How do these apply to someone just starting out today?',
+  'tony-unshakeable':'Summarize the core message of Tony Robbins "Unshakeable". What are his rules for being fearless during market crashes? How should someone behave when the market drops 20%?',
+  'tony-holygrail':'Explain Tony Robbins "The Holy Grail of Investing" co-written with Christopher Zook. What are alternative investments and private equity? What do billionaires invest in that regular investors miss? Can everyday investors access any of this?',
+  'bogle-common':'Summarize John Bogle "The Little Book of Common Sense Investing". What is his core argument for index funds? What are the key numbers he uses to prove index funds beat active management? What specific funds should someone buy today?',
+  'bogle-stay':'What is the message of Bogle "Stay the Course"? What does he mean by staying the course? How has Vanguard changed investing for regular people?',
+  'templeton-principles':'Explain Sir John Templeton investing philosophy. What is the "maximum pessimism" strategy? What are his 16 rules for investment success? Give 5 specific, actionable rules in plain English.',
+  'templeton-laws':'Who was Sir John Templeton and why is he called "the greatest stock picker of the century"? How did he combine investing with philanthropy? What can everyday investors learn from his approach to giving and growing wealth simultaneously?',
+};
+async function askBook(id){
+  const res=document.getElementById('master-res');
+  const mc=document.getElementById('master-c');
+  const mt=document.getElementById('master-t');
+  if(!res||!mc||!mt) return;
+  res.style.display='block';
+  mt.textContent='📚 Loading book insights...';
+  mc.innerHTML='<div style="display:flex;gap:4px;padding:6px 0;align-items:center"><div class="td"></div><div class="td"></div><div class="td"></div><span style="margin-left:8px;color:var(--t2);font-size:11px">Reading the book...</span></div>';
+  const reply=await aiCall(bookPrompts[id]||'Tell me about this investing book.');
+  mt.textContent='📚 Book Wisdom';
+  mc.innerHTML=fmt(reply);
+  res.scrollIntoView({behavior:'smooth'});
+}
+async function applyMaster(name){
+  const res=document.getElementById('master-res');
+  const mc=document.getElementById('master-c');
+  const mt=document.getElementById('master-t');
+  if(!res||!mc||!mt) return;
+  res.style.display='block';
+  const names={robbins:'Tony Robbins',bogle:'John Bogle',templeton:'Sir John Templeton',buffett:'Warren Buffett',dalio:'Ray Dalio'};
+  mt.textContent='🎓 Applying '+names[name]+' Strategy...';
+  mc.innerHTML='<div style="display:flex;gap:4px;padding:6px 0;align-items:center"><div class="td"></div><div class="td"></div><div class="td"></div><span style="margin-left:8px;color:var(--t2);font-size:11px">Applying strategy to your portfolio...</span></div>';
+  const prompts={
+    robbins:`Apply Tony Robbins strategy (All-Seasons Portfolio from "Money: Master the Game") to this investor. They have an Ascensus 401k and are building their portfolio. What exact allocation should they use? What should they automate first? What is the single most important thing Robbins says to do? Be specific and actionable.`,
+    bogle:`Apply John Bogle's core philosophy to this investor. They have an Ascensus 401k and are learning about investing. What specific index funds should they buy? What expense ratios should they look for? What does Bogle say about their 401k fund choices? Give specific, actionable advice.`,
+    templeton:`Apply Sir John Templeton's maximum pessimism strategy and 16 rules. How should this investor think about the current market? What would Templeton say about diversifying globally? What is Templeton's most important rule for a beginning investor? Include his perspective on giving and wealth.`,
+    buffett:`Apply Warren Buffett's philosophy. He has publicly said most people should just buy a low-cost S&P 500 index fund (VOO). What specifically would Buffett tell this person to do with their Ascensus 401k? What stocks would Buffett approve of? What would he warn against?`,
+    dalio:`Apply Ray Dalio's All-Weather Portfolio strategy. How does it compare to Tony Robbins' All-Seasons? What exact allocation does Dalio recommend and why? How does gold and commodities protect against inflation?`,
+  };
+  const reply=await aiCall(prompts[name]);
+  mc.innerHTML=fmt(reply); res.scrollIntoView({behavior:'smooth'});
+}
+
+// ═══════════════ FRIEND GROUP ═══════════════
+let friends=[];
+function addFriend(){
+  const n=document.getElementById('f-name').value.trim(), b=parseFloat(document.getElementById('f-bal').value)||0, g=parseFloat(document.getElementById('f-goal').value)||0;
+  if(!n){const el=document.getElementById('f-name');if(el){el.style.borderColor='var(--red)';setTimeout(()=>el.style.borderColor='',2000);}return;}
+  friends.push({name:n,bal:b,goal:g,pct:g?Math.round(b/g*100):0});
+  document.getElementById('f-name').value=''; document.getElementById('f-bal').value=''; document.getElementById('f-goal').value='';
+  renderFriends();
+}
+function renderFriends(){
+  const total=friends.reduce((s,f)=>s+f.bal,0);
+  document.getElementById('friend-total').textContent='$'+total.toLocaleString();
+  document.getElementById('friend-count').textContent=friends.length+' members';
+  const emojis=['🦁','🚀','🌱','⚡','🎯','💰','🏆','🔥'];
+  const friendListEl = document.getElementById('friend-list');
+  if(friendListEl) {
+    friendListEl.innerHTML = '';
+    friends.forEach((f,i)=>{
+      const goalHtml = f.goal
+        ? '<div style="font-size:10px;color:var(--t2)">Goal: $'+f.goal.toLocaleString()+'</div><div class="pb" style="margin-top:3px;width:120px"><div class="pf" style="width:'+Math.min(f.pct,100)+'%;background:var(--grn)"></div></div>'
+        : '<div style="font-size:10px;color:var(--t2)">No goal set</div>';
+      const pctTag = f.goal ? '<span class="tag tag-buy" style="font-size:9px">'+f.pct+'% to goal</span>' : '';
+      const div = document.createElement('div');
+      div.className = 'friend-row';
+      div.innerHTML = '<div class="friend-avatar" style="background:var(--bld)">'+emojis[i%emojis.length]+'</div>'
+        + '<div style="flex:1"><div class="friend-name">'+f.name+'</div>'+goalHtml+'</div>'
+        + '<div class="friend-bal">$'+f.bal.toLocaleString()+'</div>'
+        + pctTag
+        + '<button class="btn btn-sm btn-ghost">✕</button>';
+      div.querySelector('button').addEventListener('click', ()=>{friends.splice(i,1);renderFriends();});
+      friendListEl.appendChild(div);
+    });
+  }
+  if(friends.length>0){document.getElementById('group-total-box').style.display='block';document.getElementById('group-total').textContent='$'+total.toLocaleString();document.getElementById('group-note').textContent=`${friends.length} members · Average: $${Math.round(total/friends.length).toLocaleString()} per person`;}
+}
+
+// ═══════════════ DISCLAIMER DOWNLOAD ═══════════════
+function downloadDisclaimer(){
+  const text=`APEX AI — INVESTMENT RISK DISCLAIMER & LEGAL NOTICE
+Generated: ${new Date().toLocaleDateString()}
+================================================================
+
+IMPORTANT: PLEASE READ BEFORE USING APEX AI OR PARTICIPATING
+IN ANY INVESTMENT GROUP USING THIS TOOL.
+
+1. NOT FINANCIAL ADVICE
+APEX AI is an educational and informational tool only. Nothing
+provided by APEX AI constitutes investment advice, financial advice,
+legal advice, or tax advice. All information is for educational
+purposes only.
+
+2. RISK OF LOSS
+All investments involve risk, including the possible loss of the
+entire principal amount invested. Past performance is not indicative
+of future results. Stock prices, ETF values, REIT distributions, and
+all investment returns can go down as well as up.
+
+3. NO LIABILITY FOR LOSSES
+The creator, developer, or any person sharing this APEX AI tool is
+NOT responsible for any financial losses, investment decisions, or
+outcomes made by any user or group member. Each individual is solely
+responsible for their own investment decisions and their outcomes.
+
+4. GROUP INVESTING DISCLAIMER
+If this tool is shared with a group of friends or colleagues, each
+member independently accepts full responsibility for their own
+investment decisions. No individual sharing this tool is acting as a
+licensed investment advisor, broker-dealer, or financial planner
+unless separately licensed by the appropriate regulatory authority.
+
+5. CONSULT A LICENSED PROFESSIONAL
+Before making investment decisions, consult a licensed and registered
+financial advisor, CPA, or attorney who can evaluate your specific
+financial situation, risk tolerance, and goals.
+
+6. NOT A REGISTERED INVESTMENT ADVISOR
+APEX AI and its creator are NOT registered with the SEC, FINRA,
+or any state securities regulator as an investment advisor or
+broker-dealer.
+
+7. MARKET RISK ACKNOWLEDGMENT
+By using APEX AI, you acknowledge that:
+- Markets can and do lose value, sometimes dramatically
+- No AI or algorithm can predict the future
+- Investments should be made based on your own research
+- You may lose some or all of the money you invest
+- Tax laws change and information may become outdated
+
+8. MEMBER ACKNOWLEDGMENT (For Investment Groups)
+Each group member should sign below to acknowledge they have read
+and understood this disclaimer:
+
+Name: _________________________ Date: ___________
+Signature: ___________________________
+
+Name: _________________________ Date: ___________
+Signature: ___________________________
+
+Name: _________________________ Date: ___________
+Signature: ___________________________
+
+Name: _________________________ Date: ___________
+Signature: ___________________________
+
+================================================================
+This disclaimer was generated by APEX AI on ${new Date().toLocaleDateString()}.
+Share this with every member of your investment group before
+discussing or comparing investment activities.`;
+
+  const blob=new Blob([text],{type:'text/plain'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='APEX_AI_Investment_Disclaimer.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ═══════════════ GOALS ═══════════════
+async function createGoal(){
+  const tEl=document.getElementById('g-t'),aEl=document.getElementById('g-a'),dEl=document.getElementById('g-d'),mEl=document.getElementById('g-m');
+  if(!tEl||!aEl) return;
+  const t=tEl.value,a=aEl.value,d=dEl?.value||'',m=mEl?.value||'200';
+  const resEl=document.getElementById('goal-res'); if(resEl) resEl.style.display='block';
+  const tEl2=document.getElementById('goal-t'); if(tEl2) tEl2.textContent='Building your plan...';
+  const cEl=document.getElementById('goal-c'); if(cEl) cEl.innerHTML='<div style="display:flex;gap:4px;padding:6px 0"><div class="td"></div><div class="td"></div><div class="td"></div><span style="margin-left:8px;color:var(--t2);font-size:11px">AI is building your complete plan...</span></div>';
+  const reply=await aiCall(`Goal: ${t}. Target: $${a}. By: ${d}. Monthly: $${m}. Ascensus 401k is their primary account. Recommend: 1) Which APEX AI basket (All-Seasons/Growth/Short-Term/Income), 2) Which account type (Roth IRA/401k/brokerage), 3) Is the goal realistic with their timeline, 4) One master investor insight (Robbins/Bogle/Templeton) most relevant to this goal.`);
+  if(tEl2) tEl2.textContent='🎯 Your Complete Plan'; if(cEl) cEl.innerHTML=fmt(reply);
+}
+
+// ═══════════════ RISK ═══════════════
+async function checkRisk(){
+  const r=document.getElementById('risk-c');
+  if(!r) return;
+  r.innerHTML='<div style="display:flex;gap:4px;padding:6px 0"><div class="td"></div><div class="td"></div><div class="td"></div><span style="margin-left:8px;color:var(--t2);font-size:11px">Analyzing your risk profile...</span></div>';
+  const tol=document.getElementById('r-sel').value;
+  const reply=await aiCall(`Risk tolerance: ${tol}. Investor has Ascensus 401k plus additional brokerage accounts. Give 3 specific, plain-English risk recommendations. Reference what Tony Robbins says about risk in "Unshakeable" and what Bogle says about staying the course.`);
+  r.innerHTML=fmt(reply);
+}
+
+// ═══════════════ LEARN ═══════════════
+const LESSONS=[
+  {i:'🔥',t:'Tony Robbins All-Seasons Portfolio',d:'30% stocks, 40% long bonds, 15% mid bonds, 7.5% gold, 7.5% commodities. Wins in inflation, deflation, growth, and recession.',l:'Intermediate'},
+  {i:'🏆',t:'Bogle: Just Buy the Haystack',d:'Own everything with one index fund. VOO or VTI. Beats 92% of professional fund managers. Lowest possible cost.',l:'Beginner'},
+  {i:'🌍',t:'Templeton: Buy at Maximum Pessimism',d:'When everyone is selling and scared, that\'s when Sir John Templeton bought. He became billionaire using this contrarian approach.',l:'Advanced'},
+  {i:'💸',t:'Fractional Shares — Start with $5',d:'You don\'t need $880 to own NVIDIA. $5 buys 0.006 of a share. Same % gains as someone who owns 100 shares.',l:'Beginner'},
+  {i:'💜',t:'Roth IRA — Tax-Free Forever',d:'$7,000/year, grows completely tax-free. The single most powerful wealth account for most people. Open at Fidelity, free.',l:'Beginner'},
+  {i:'📉',t:'Dollar-Cost Averaging',d:'Invest the same amount every month regardless of price. Robbins calls this your best friend. Buy more when prices are low.',l:'Beginner'},
+  {i:'🏢',t:'REITs — Own Real Estate from $1',d:'Companies that own buildings pay you rent as dividends. VNQ holds 500+ properties. Realty Income (O) pays monthly.',l:'Beginner'},
+  {i:'📊',t:'ETFs — Buy the Whole Basket',d:'One ETF purchase = hundreds of companies. VOO holds all of the S&P 500\'s 500 largest companies in one click.',l:'Beginner'},
+  {i:'🤖',t:'How Auto-Invest AI Works',d:'AI sets rules for when to invest more (market dip), when to pause (stop-loss), and when to rebalance. Removes emotion.',l:'Intermediate'},
+  {i:'💰',t:'Compound Interest — The 8th Wonder',d:'$100/month at 9% for 30 years = $183,000. You invested $36,000. The extra $147,000 is FREE from compound growth.',l:'Beginner'},
+  {i:'🏛️',t:'Donor-Advised Fund — Your Foundation',d:'Contribute stock to a DAF, get the full deduction now, give to any charity on your timeline. Free at Fidelity Charitable.',l:'Intermediate'},
+  {i:'⚖️',t:'Asset Allocation — The Master Rule',d:'How you divide your money between stocks, bonds, and alternatives matters more than which specific stocks you pick.',l:'Intermediate'},
+];
+// learnMore — takes lesson index (safe, no string escaping issues)
+async function learnMore(idxOrTopic, btn){
+  if(!btn) return;
+  const topic = typeof idxOrTopic === 'number' ? LESSONS[idxOrTopic].t : idxOrTopic;
+  btn.textContent='⏳ Loading...'; btn.disabled=true;
+  try {
+    const reply=await aiCall('Explain "'+topic+'" in investing. Use an analogy. Reference a master investor (Robbins, Bogle, Templeton, Buffett) if relevant. Under 120 words. Memorable.');
+    const descDiv=btn.parentElement.querySelector('.learn-desc');
+    if(descDiv) descDiv.innerHTML='<div style="background:var(--bg3);border-radius:7px;padding:9px;font-size:11px;line-height:1.65;color:var(--t2)">'+fmt(reply)+'</div>';
+    btn.textContent='✅ Got it!';
+  } catch(e) {
+    btn.textContent='Try Again';
+    console.error('learnMore error:',e);
+  } finally {
+    btn.disabled=false;
+  }
+}
+// Render learn grid (element always exists in DOM at this point)
+// Build learn grid safely — store index on data attribute to avoid inline string issues
+LESSONS.forEach((l, idx)=>{
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.style.cssText = 'cursor:default;transition:border .14s';
+  card.onmouseenter = ()=>card.style.borderColor='var(--gold)';
+  card.onmouseleave = ()=>card.style.borderColor='var(--border)';
+  card.innerHTML = `
+    <div style="font-size:22px;margin-bottom:6px">${l.i}</div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+      <div style="font-weight:800;font-size:12.5px">${l.t}</div>
+      <span class="tag" style="background:var(--border);color:var(--t2);font-size:9px">${l.l}</span>
+    </div>
+    <div class="learn-desc" style="font-size:11px;color:var(--t2);line-height:1.55;margin-bottom:8px">${l.d}</div>
+    <button class="btn btn-sm btn-outline btn-full" data-lidx="${idx}">📖 Explain More</button>`;
+  // Attach click handler safely via JS (no inline string escaping needed)
+  card.querySelector('button').addEventListener('click', function(){learnMore(idx, this);});
+  document.getElementById('learn-grid').appendChild(card);
+});
+
+</script>
+</body>
+</html>
